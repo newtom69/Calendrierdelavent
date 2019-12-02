@@ -46,7 +46,7 @@ namespace AdventCalendar.Tools
                 return false;
             }
         }
-        
+
         public static string UrlVersNom(this string url)
         {
             return url.Replace("-", " ").Replace("_", "-");

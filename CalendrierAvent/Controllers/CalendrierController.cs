@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace AdventCalendar.Controllers
@@ -27,7 +25,7 @@ namespace AdventCalendar.Controllers
                 dictionaryGenericsPicturesNames.Add(i, Path.Combine(boxPicturePath, $"{i}.png"));
             }
             Dictionary<int, string> dictionaryPicturesNames = calendarDAL.Dictionary(name, DateTime.Today);
-            
+
             CalendarViewModel calendarViewModel = new CalendarViewModel(dictionaryPicturesNames, dictionaryGenericsPicturesNames);
             return View(calendarViewModel);
         }

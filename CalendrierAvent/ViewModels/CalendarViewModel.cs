@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace AdventCalendar.ViewModels
 {
@@ -10,7 +7,7 @@ namespace AdventCalendar.ViewModels
         //public string[] ImagesPath = new string[24];
 
         public Dictionary<int, string> DictionaryPicturesNames { get; }
-        public Dictionary<int, string> DictionaryGenericsPicturesNames { get;}
+        public Dictionary<int, string> DictionaryGenericsPicturesNames { get; }
 
         public CalendarViewModel(Dictionary<int, string> dictionaryPicturesNames, Dictionary<int, string> dictionaryGenericsPicturesNames)
         {

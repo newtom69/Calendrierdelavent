@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Web;
 
 namespace AdventCalendar.DAL
 {
@@ -28,7 +27,7 @@ namespace AdventCalendar.DAL
         {
             string calendarPath = new CalendarDAL().GetEncryptedName(calendarId);
             string openPicturePath = Path.Combine(ConfigurationManager.AppSettings["PicturePath"], calendarPath);
-         
+
             using (AdventCalendarEntities db = new AdventCalendarEntities())
             {
                 Dictionary<int, string> pictures = (from p in db.Picture
