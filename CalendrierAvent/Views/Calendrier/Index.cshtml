@@ -1,0 +1,40 @@
+﻿@using AdventCalendar.ViewModels
+@model CalendarViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>Calendrier de l'Avent de @ViewBag.CalendarName</h1>
+<div class="Calendar">
+    @for (int i = 1; i <= Model.DictionaryGenericsPicturesNames.Count; i++)
+    {
+        <div class="BoxAndPicture">
+            <img class="box" src="@Model.DictionaryGenericsPicturesNames[i]" alt="@(i)" />
+            @if (Model.DictionaryPicturesNames.ContainsKey(i))
+            {
+                <img class="hover" src="@Model.DictionaryPicturesNames[i]" alt="@(i)" onclick="popup.style.display = 'block';  imageToPopup.src = this.src;  captionText.innerHTML = this.alt;" />
+            }
+            else
+            {
+                <img class="hover" src="@Model.DictionaryGenericsPicturesNames[i]" alt="@(i)" />
+            }
+        </div>
+
+    }
+
+</div>
+
+<div id="PopupPicture" class="popup">
+    <span class="close">&times;</span>
+    <img class="popup-content" id="imageToPopup">
+    <div id="caption"></div>
+</div>
+<script>
+    var popup = document.getElementById("PopupPicture");
+    var imageToPopup = document.getElementById("imageToPopup");
+    var captionText = document.getElementById("caption");
+    popup.onclick = function () {
+        popup.style.display = "none";
+    }
+</script>

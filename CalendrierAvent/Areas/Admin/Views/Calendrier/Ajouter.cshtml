@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Ajouter";
+}
+
+<h2>Ajouter</h2>
+
+@using (Html.BeginForm((string)ViewContext.RouteData.Values["action"], (string)ViewContext.RouteData.Values["controller"], new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="ccfield-prepend">
+        <input class="ccformfield" name="name" type="text" title="Nom" placeholder="Nom" maxlength='20' required>
+    </div>
+    <div class="ccfield-prepend">
+        <input class="ccbtn" type="submit" value="Ajouter">
+    </div>
+}
