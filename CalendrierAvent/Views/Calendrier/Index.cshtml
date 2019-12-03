@@ -19,7 +19,7 @@
             <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
             @if (Model.PicturesNames.ContainsKey(i))
             {
-                <img id="@currentPicture" class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="PopupAndShowHidePictures(this, @currentBox);" onmouseover="ShowHidePictures(this, @currentBox);" />
+                <img id="@currentPicture" class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="Popup_ShowPictures_HideBox(this, @currentBox);" onmouseover="ShowPicture_HideBox(this, @currentBox);" />
             }
             else
             {
@@ -33,8 +33,8 @@
 
 <div id="PopupPicture" class="popup">
     <span id="closeButton" class="close">&times;</span>
-    <span id="previous" class="previous">&lt;</span>
-    <span id="next" class="next">&gt;</span>
+    <span id="previousButton" class="previous">&lt;</span>
+    <span id="nextButton" class="next">&gt;</span>
     <img class="popup-content" id="imageToPopup">
     <div id="caption"></div>
 </div>
@@ -52,30 +52,33 @@
     }
 
 
-    function PopupAndShowHidePictures(pictureToShowPermanently, boxToHidePermanently) {
-        var previous = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) - 1);
-        var next = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) + 1);
-        previousPicture = document.getElementById(previous);
-        nextPicture = document.getElementById(next);
+    function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
 
-        previous = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) - 1);
-        next = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) + 1);
-        previousBox = document.getElementById(previous);
-        nextBox = document.getElementById(next);
-        document.getElementById("previous").onclick = function () {
-            PopupAndShowHidePictures(previousPicture, previousBox);
+        var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) - 1);
+        var nextPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) + 1);
+        previousPicture = document.getElementById(previousPictureId);
+        nextPicture = document.getElementById(nextPictureId);
+
+        var previousBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) - 1);
+        var nextBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) + 1);
+        previousBox = document.getElementById(previousBoxId);
+        nextBox = document.getElementById(nextBoxId);
+
+        document.getElementById("previousButton").onclick = function () {
+            Popup_ShowPictures_HideBox(previousPicture, previousBox);
         }
-        document.getElementById("next").onclick = function () {
-            PopupAndShowHidePictures(nextPicture, nextBox);
+        document.getElementById("nextButton").onclick = function () {
+            Popup_ShowPictures_HideBox(nextPicture, nextBox);
         }
 
         popup.style.display = 'block';
         imageToPopup.src = pictureToShowPermanently.src;
         captionText.innerHTML = pictureToShowPermanently.alt;
-        ShowHidePictures(pictureToShowPermanently, boxToHidePermanently);
+        ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
     }
 
-    function ShowHidePictures(pictureToShowPermanently, boxToHidePermanently) {
+    function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
+
         pictureToShowPermanently.style.display = 'block';
         boxToHidePermanently.style.display = 'none';
     }
