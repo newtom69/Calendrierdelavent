@@ -32,16 +32,19 @@
 </div>
 
 <div id="PopupPicture" class="popup">
+    <a href="" target="_blank" id="pictureLink">
+        <img class="popup-content" id="imageToPopup">
+    </a>
     <span id="closeButton" class="close">&times;</span>
     <span id="previousButton" class="previous">&lt;</span>
     <span id="nextButton" class="next">&gt;</span>
-    <img class="popup-content" id="imageToPopup">
     <div id="caption"></div>
 </div>
 
 <script>
     var popup = document.getElementById("PopupPicture");
     var imageToPopup = document.getElementById("imageToPopup");
+    var pictureLink = document.getElementById("pictureLink");
     var captionText = document.getElementById("caption");
     var closeButton = document.getElementById("closeButton");
 
@@ -72,6 +75,7 @@
         popup.style.display = 'block';
         imageToPopup.src = pictureToShowPermanently.src;
         captionText.innerHTML = pictureToShowPermanently.alt;
+        pictureLink.href = pictureToShowPermanently.src;
         ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
     }
 

@@ -35,8 +35,8 @@
         object-fit: contain;
     }
 
-    .BoxAndPicture img.box {
-    }
+        .BoxAndPicture img.box {
+        }
 
     .BoxAndPicture:hover img.box {
         display: none;
@@ -54,7 +54,7 @@
     display: none;
     position: fixed;
     z-index: 1;
-    padding-top: 100px;
+    padding-top: 1%;
     left: 0;
     top: 0;
     width: 100%;
@@ -67,8 +67,8 @@
 .popup-content {
     margin: auto;
     display: block;
-    width: 90%;
-    max-width: 900px;
+    max-width: 90%;
+    max-height: 90%;
 }
 
 #caption {
@@ -119,6 +119,27 @@
     transition: 0.5s;
 }
 
+.previous {
+    position: fixed;
+    top: 500px;
+    right: 1200px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.5s;
+}
+
+.next {
+    position: fixed;
+    top: 500px;
+    right: 400px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.5s;
+}
+
+
     .close:hover, .close:focus {
         color: #bbb;
         text-decoration: none;
@@ -128,6 +149,7 @@
 @media only screen and (max-width: 700px) {
     .popup-content {
         width: 100%;
+        max-height:100%;
     }
 }
 
