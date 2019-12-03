@@ -15,7 +15,7 @@
             <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
             @if (Model.PicturesNames.ContainsKey(i))
             {
-                <img class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="showPopup(this, @currentBox);" />
+                <img class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="PopupAndShowHidePictures(this, @currentBox);" />
             }
             else
             {
@@ -43,11 +43,11 @@
     span.onclick = function () {
         popup.style.display = "none";
     }
-    function showPopup(toShow, toHide) {
-        toShow.style.display = 'block';
-        toHide.style.display = 'none';
+    function PopupAndShowHidePictures(pictureToShowPermanently, boxToHidePermanently) {
         popup.style.display = 'block';
-        imageToPopup.src = toShow.src;
-        captionText.innerHTML = toShow.alt;
+        imageToPopup.src = pictureToShowPermanently.src;
+        captionText.innerHTML = pictureToShowPermanently.alt;
+        pictureToShowPermanently.style.display = 'block';
+        boxToHidePermanently.style.display = 'none';
     }
 </script>
