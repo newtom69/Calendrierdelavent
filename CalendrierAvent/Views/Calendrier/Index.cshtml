@@ -4,18 +4,22 @@
 @{
     ViewBag.Title = "Index";
     int dayNumber = DateTime.Today.Day;
+    const string BoxPreffix = "box";
+    const string PicturePreffix = "pict";
+
 }
 
 <h1>Calendrier de l'Avent de @ViewBag.CalendarName</h1>
 <div class="Calendar">
     @for (int i = 1; i <= Model.GenericsPicturesNames.Count; i++)
     {
-        string currentBox = "box" + i;
+        string currentBox = BoxPreffix + i;
+        string currentPicture = PicturePreffix + i;
         <div class="BoxAndPicture">
             <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
             @if (Model.PicturesNames.ContainsKey(i))
             {
-                <img class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="PopupAndShowHidePictures(this, @currentBox);" />
+                <img id="@currentPicture" class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="PopupAndShowHidePictures(this, @currentBox);" onmouseover="ShowHidePictures(this, @currentBox);" />
             }
             else
             {
@@ -28,7 +32,9 @@
 </div>
 
 <div id="PopupPicture" class="popup">
-    <span class="close">&times;</span>
+    <span id="closeButton" class="close">&times;</span>
+    <span id="previous" class="previous">&lt;</span>
+    <span id="next" class="next">&gt;</span>
     <img class="popup-content" id="imageToPopup">
     <div id="caption"></div>
 </div>
@@ -36,18 +42,44 @@
     var popup = document.getElementById("PopupPicture");
     var imageToPopup = document.getElementById("imageToPopup");
     var captionText = document.getElementById("caption");
-    popup.onclick = function () {
+    var closeButton = document.getElementById("closeButton");
+    var previousPicture;
+    var nextPicture;
+    var previousBox;
+    var nextBox;
+    closeButton.onclick = function () {
         popup.style.display = "none";
     }
-    var span = document.getElementsByClassName("close")[0];
-    span.onclick = function () {
-        popup.style.display = "none";
-    }
+
+
     function PopupAndShowHidePictures(pictureToShowPermanently, boxToHidePermanently) {
+        var previous = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) - 1);
+        var next = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) + 1);
+        previousPicture = document.getElementById(previous);
+        nextPicture = document.getElementById(next);
+
+        previous = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) - 1);
+        next = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) + 1);
+        previousBox = document.getElementById(previous);
+        nextBox = document.getElementById(next);
+        document.getElementById("previous").onclick = function () {
+            PopupAndShowHidePictures(previousPicture, previousBox);
+        }
+        document.getElementById("next").onclick = function () {
+            PopupAndShowHidePictures(nextPicture, nextBox);
+        }
+
         popup.style.display = 'block';
         imageToPopup.src = pictureToShowPermanently.src;
         captionText.innerHTML = pictureToShowPermanently.alt;
+        ShowHidePictures(pictureToShowPermanently, boxToHidePermanently);
+    }
+
+    function ShowHidePictures(pictureToShowPermanently, boxToHidePermanently) {
         pictureToShowPermanently.style.display = 'block';
         boxToHidePermanently.style.display = 'none';
     }
+
+
+
 </script>

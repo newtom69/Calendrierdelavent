@@ -197,10 +197,6 @@
     <Content Include="Content\Box\47d056a70e4e42afaa9fcf70b6355928\7.png" />
     <Content Include="Content\Box\47d056a70e4e42afaa9fcf70b6355928\8.png" />
     <Content Include="Content\Box\47d056a70e4e42afaa9fcf70b6355928\9.png" />
-    <Content Include="Content\Photos\Camille-000001\9bf0b8d9963f4450874e48507d1bf93f.jpg" />
-    <Content Include="Content\Photos\Camille-000001\9bf0b8d9963f4450874e48578d1bf93f.jpg" />
-    <Content Include="Content\Photos\CamJer-u2kwt4\9bf0b7d9963f4450874e48507d1bf93f.jpg" />
-    <Content Include="Content\Photos\CamJer-u2kwt4\d4be56be17384392a8d1cfa949d183db.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -260,6 +256,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Pictures\" />
+    <Folder Include="Content\Photos\" />
     <Folder Include="Views\Photo\" />
   </ItemGroup>
   <ItemGroup>
