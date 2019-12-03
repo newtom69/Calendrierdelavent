@@ -32,13 +32,13 @@
 </div>
 
 <div id="PopupPicture" class="popup">
-    <a href="" target="_blank" id="pictureLink">
+    <div id="largeImageAndButtons">
         <img class="popup-content" id="imageToPopup">
-    </a>
-    <span id="closeButton" class="close">&times;</span>
-    <span id="previousButton" class="previous">&lt;</span>
-    <span id="nextButton" class="next">&gt;</span>
-    <div id="caption"></div>
+        <div id="previousButton" class="previous">&blacktriangleleft;</div>
+        <div id="nextButton" class="next">&blacktriangleright;</div>
+        <div id="closeButton" class="close">&Cross;</div>
+        <div id="caption"></div>
+    </div>
 </div>
 
 <script>
@@ -47,11 +47,14 @@
     var pictureLink = document.getElementById("pictureLink");
     var captionText = document.getElementById("caption");
     var closeButton = document.getElementById("closeButton");
+    var previousButton = document.getElementById("previousButton");
+    var nextButton = document.getElementById("nextButton");
 
     closeButton.onclick = function () {
         popup.style.display = "none";
     }
 
+    window.addEventListener("resize", Resize);
 
     function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
 
@@ -72,6 +75,11 @@
             Popup_ShowPictures_HideBox(nextPicture, nextBox);
         }
 
+        setTimeout(function () {
+            Resize();
+        }, 100);
+
+
         popup.style.display = 'block';
         imageToPopup.src = pictureToShowPermanently.src;
         captionText.innerHTML = pictureToShowPermanently.alt;
@@ -85,6 +93,9 @@
         boxToHidePermanently.style.display = 'none';
     }
 
-
+    function Resize() {
+        nextButton.style.top = document.getElementById("imageToPopup").clientHeight / 2 - 10 + "px";
+        previousButton.style.top = document.getElementById("imageToPopup").clientHeight/2 - 10 +"px" ;
+    }
 
 </script>
