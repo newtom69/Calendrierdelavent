@@ -38,15 +38,13 @@
     <img class="popup-content" id="imageToPopup">
     <div id="caption"></div>
 </div>
+
 <script>
     var popup = document.getElementById("PopupPicture");
     var imageToPopup = document.getElementById("imageToPopup");
     var captionText = document.getElementById("caption");
     var closeButton = document.getElementById("closeButton");
-    var previousPicture;
-    var nextPicture;
-    var previousBox;
-    var nextBox;
+
     closeButton.onclick = function () {
         popup.style.display = "none";
     }
@@ -54,15 +52,15 @@
 
     function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
 
-        var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) - 1);
+        var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) - 1);
         var nextPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) + 1);
-        previousPicture = document.getElementById(previousPictureId);
-        nextPicture = document.getElementById(nextPictureId);
+        var previousPicture = document.getElementById(previousPictureId);
+        var nextPicture = document.getElementById(nextPictureId);
 
         var previousBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) - 1);
         var nextBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) + 1);
-        previousBox = document.getElementById(previousBoxId);
-        nextBox = document.getElementById(nextBoxId);
+        var previousBox = document.getElementById(previousBoxId);
+        var nextBox = document.getElementById(nextBoxId);
 
         document.getElementById("previousButton").onclick = function () {
             Popup_ShowPictures_HideBox(previousPicture, previousBox);
