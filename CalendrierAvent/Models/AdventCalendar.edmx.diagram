@@ -6,8 +6,10 @@
     <edmx:Diagrams>
       <Diagram DiagramId="adedf5e5df444480af3e83628811ec57" Name="Diagram1">
         <EntityTypeShape EntityType="AdventCalendarModel.Calendar" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="AdventCalendarModel.Picture" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AdventCalendarModel.Picture" Width="1.5" PointX="2.875" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="AdventCalendarModel.FK_Picture_Calendar" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="AdventCalendarModel.Box" Width="1.5" PointX="0.75" PointY="3.875" />
+        <AssociationConnector Association="AdventCalendarModel.FK_Calendar_Box" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

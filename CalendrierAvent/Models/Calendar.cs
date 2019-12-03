@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AdventCalendar.Models
+namespace AdventCalendar
 {
     using System;
     using System.Collections.Generic;
@@ -23,9 +23,10 @@ namespace AdventCalendar.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string EncryptedName { get; set; }
-        public string BoxName { get; set; }
+        public int BoxId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Picture> Picture { get; set; }
+        public virtual Box Box { get; set; }
     }
 }

@@ -9,12 +9,11 @@ namespace AdventCalendar
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-
             routes.MapRoute(
-                name: "DirectCalendar",
-                url: "{name}",
-                defaults: new { controller = "Calendrier", action = "Index", name = UrlParameter.Optional },
-                namespaces: new[] { "AdventCalendar.Controllers" }
+            name: "DirectCalendar",
+            url: "{name}",
+            defaults: new { controller = "Calendrier", action = "Index", name = UrlParameter.Optional },
+            namespaces: new[] { "AdventCalendar.Controllers" }
             );
 
             routes.MapRoute(
@@ -30,6 +29,7 @@ namespace AdventCalendar
                 defaults: new { controller = "Home", action = "Index", name = UrlParameter.Optional },
                 namespaces: new[] { "AdventCalendar.Controllers" }
             );
+
 
         }
     }

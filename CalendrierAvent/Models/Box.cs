@@ -12,13 +12,19 @@ namespace AdventCalendar
     using System;
     using System.Collections.Generic;
     
-    public partial class Picture
+    public partial class Box
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Box()
+        {
+            this.Calendar = new HashSet<Calendar>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
-        public int CalendarId { get; set; }
-        public int DayNumber { get; set; }
+        public string Path { get; set; }
     
-        public virtual Calendar Calendar { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Calendar> Calendar { get; set; }
     }
 }

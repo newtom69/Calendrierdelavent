@@ -84,12 +84,20 @@ namespace AdventCalendar.DAL
                 return new Dictionary<int, string>();
         }
 
-        public Dictionary<int, string> Dictionary(string name, DateTime date)
+        public Dictionary<int, string> Dictionary(string name, DateTime? date = null)
         {
-            if (date.Month == 12)
-                return new PictureDAL().Dictionary(Details(name).Id, date.Day);
+            DateTime dateOk = date ?? DateTime.MaxValue;
+            if (dateOk == DateTime.MaxValue)
+            {
+                return new PictureDAL().Dictionary(Details(name).Id);
+            }
             else
-                return new Dictionary<int, string>();
+            {
+                if (dateOk.Month == 12)
+                    return new PictureDAL().Dictionary(Details(name).Id, dateOk.Day);
+                else
+                    return new Dictionary<int, string>();
+            }
         }
 
         public void Add(string name)

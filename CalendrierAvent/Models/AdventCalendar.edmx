@@ -5,6 +5,14 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="AdventCalendarModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Box">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Path" Type="char" MaxLength="32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Calendar">
           <Key>
             <PropertyRef Name="Id" />
@@ -12,7 +20,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="EncryptedName" Type="varchar" MaxLength="27" Nullable="false" />
-          <Property Name="BoxName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="BoxId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Picture">
           <Key>
@@ -23,6 +31,18 @@
           <Property Name="CalendarId" Type="int" Nullable="false" />
           <Property Name="DayNumber" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Calendar_Box">
+          <End Role="Box" Type="Self.Box" Multiplicity="1" />
+          <End Role="Calendar" Type="Self.Calendar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Box">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calendar">
+              <PropertyRef Name="BoxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Picture_Calendar">
           <End Role="Calendar" Type="Self.Calendar" Multiplicity="1" />
           <End Role="Picture" Type="Self.Picture" Multiplicity="*" />
@@ -36,8 +56,13 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="AdventCalendarModelStoreContainer">
+          <EntitySet Name="Box" EntityType="Self.Box" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Picture" EntityType="Self.Picture" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Calendar_Box" Association="Self.FK_Calendar_Box">
+            <End Role="Box" EntitySet="Box" />
+            <End Role="Calendar" EntitySet="Calendar" />
+          </AssociationSet>
           <AssociationSet Name="FK_Picture_Calendar" Association="Self.FK_Picture_Calendar">
             <End Role="Calendar" EntitySet="Calendar" />
             <End Role="Picture" EntitySet="Picture" />
@@ -55,7 +80,8 @@
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="EncryptedName" Type="String" MaxLength="27" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Picture" Relationship="Self.FK_Picture_Calendar" FromRole="Calendar" ToRole="Picture" />
-          <Property Name="BoxName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="BoxId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Box" Relationship="AdventCalendarModel.FK_Calendar_Box" FromRole="Calendar" ToRole="Box" />
         </EntityType>
         <EntityType Name="Picture">
           <Key>
@@ -86,7 +112,33 @@
             <End Role="Calendar" EntitySet="Calendar" />
             <End Role="Picture" EntitySet="Picture" />
           </AssociationSet>
+          <EntitySet Name="Box" EntityType="AdventCalendarModel.Box" />
+          <AssociationSet Name="FK_Calendar_Box" Association="AdventCalendarModel.FK_Calendar_Box">
+            <End Role="Box" EntitySet="Box" />
+            <End Role="Calendar" EntitySet="Calendar" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Box">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="32" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Calendar" Relationship="AdventCalendarModel.FK_Calendar_Box" FromRole="Box" ToRole="Calendar" />
+        </EntityType>
+        <Association Name="FK_Calendar_Box">
+          <End Type="AdventCalendarModel.Box" Role="Box" Multiplicity="1" />
+          <End Type="AdventCalendarModel.Calendar" Role="Calendar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Box">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calendar">
+              <PropertyRef Name="BoxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -96,7 +148,7 @@
           <EntitySetMapping Name="Calendar">
             <EntityTypeMapping TypeName="AdventCalendarModel.Calendar">
               <MappingFragment StoreEntitySet="Calendar">
-                <ScalarProperty Name="BoxName" ColumnName="BoxName" />
+                <ScalarProperty Name="BoxId" ColumnName="BoxId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="EncryptedName" ColumnName="EncryptedName" />
@@ -110,6 +162,15 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CalendarId" ColumnName="CalendarId" />
                 <ScalarProperty Name="DayNumber" ColumnName="DayNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Box">
+            <EntityTypeMapping TypeName="AdventCalendarModel.Box">
+              <MappingFragment StoreEntitySet="Box">
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -27,5 +27,6 @@ namespace AdventCalendar.Models
     
         public virtual DbSet<Calendar> Calendar { get; set; }
         public virtual DbSet<Picture> Picture { get; set; }
+        public virtual DbSet<Box> Box { get; set; }
     }
 }
