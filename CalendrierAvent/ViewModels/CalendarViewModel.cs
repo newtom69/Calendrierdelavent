@@ -4,15 +4,13 @@ namespace AdventCalendar.ViewModels
 {
     public class CalendarViewModel
     {
-        //public string[] ImagesPath = new string[24];
+        public Dictionary<int, string> PicturesNames { get; }
+        public Dictionary<int, string> GenericsPicturesNames { get; }
 
-        public Dictionary<int, string> DictionaryPicturesNames { get; }
-        public Dictionary<int, string> DictionaryGenericsPicturesNames { get; }
-
-        public CalendarViewModel(Dictionary<int, string> dictionaryPicturesNames, Dictionary<int, string> dictionaryGenericsPicturesNames)
+        public CalendarViewModel(Dictionary<int, string> picturesNames, Dictionary<int, string> genericsPicturesNames)
         {
-            DictionaryPicturesNames = dictionaryPicturesNames;
-            DictionaryGenericsPicturesNames = dictionaryGenericsPicturesNames;
+            PicturesNames = picturesNames;
+            GenericsPicturesNames = genericsPicturesNames;
         }
     }
 }

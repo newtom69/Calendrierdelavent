@@ -3,21 +3,23 @@
 
 @{
     ViewBag.Title = "Index";
+    int dayNumber = DateTime.Today.Day;
 }
 
 <h1>Calendrier de l'Avent de @ViewBag.CalendarName</h1>
 <div class="Calendar">
-    @for (int i = 1; i <= Model.DictionaryGenericsPicturesNames.Count; i++)
+    @for (int i = 1; i <= Model.GenericsPicturesNames.Count; i++)
     {
+        string currentBox = "box" + i;
         <div class="BoxAndPicture">
-            <img class="box" src="@Model.DictionaryGenericsPicturesNames[i]" alt="@(i)" />
-            @if (Model.DictionaryPicturesNames.ContainsKey(i))
+            <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
+            @if (Model.PicturesNames.ContainsKey(i))
             {
-                <img class="hover" src="@Model.DictionaryPicturesNames[i]" alt="@(i)" onclick="popup.style.display = 'block';  imageToPopup.src = this.src;  captionText.innerHTML = this.alt;" />
+                <img class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="showPopup(this, @currentBox);" />
             }
             else
             {
-                <img class="hover" src="@Model.DictionaryGenericsPicturesNames[i]" alt="@(i)" />
+                <img class="hover" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
             }
         </div>
 
@@ -39,6 +41,13 @@
     }
     var span = document.getElementsByClassName("close")[0];
     span.onclick = function () {
-        modal.style.display = "none";
+        popup.style.display = "none";
+    }
+    function showPopup(toShow, toHide) {
+        toShow.style.display = 'block';
+        toHide.style.display = 'none';
+        popup.style.display = 'block';
+        imageToPopup.src = toShow.src;
+        captionText.innerHTML = toShow.alt;
     }
 </script>
