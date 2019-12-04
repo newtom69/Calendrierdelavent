@@ -197,6 +197,11 @@
     <Content Include="Content\Box\47d056a70e4e42afaa9fcf70b6355928\7.png" />
     <Content Include="Content\Box\47d056a70e4e42afaa9fcf70b6355928\8.png" />
     <Content Include="Content\Box\47d056a70e4e42afaa9fcf70b6355928\9.png" />
+    <Content Include="Content\Icones\White\Close.svg" />
+    <Content Include="Content\Icones\White\DefaultScreen.svg" />
+    <Content Include="Content\Icones\White\FullScreen.svg" />
+    <Content Include="Content\Icones\White\LeftArrow.svg" />
+    <Content Include="Content\Icones\White\RightArrow.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

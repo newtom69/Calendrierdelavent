@@ -42,8 +42,6 @@ namespace AdventCalendar.Areas.Admin.Controllers
             BoxDAL boxDAL = new BoxDAL();
             Box box = boxDAL.Details(calendar.BoxId);
 
-            
-
             string boxPictureFullName = Path.Combine(ConfigurationManager.AppSettings["BoxPicturePath"], box.Path);
             Dictionary<int, string> dictionaryGenericsPicturesNames = new Dictionary<int, string>();
             for (int i = 1; i <= 24; i++)

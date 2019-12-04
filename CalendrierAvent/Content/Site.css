@@ -77,8 +77,10 @@
 }
 
 #caption {
+    margin-top:10px;
     text-align: center;
     color: #ccc;
+    font-size:larger;
 }
 
 .popup-content, #caption {
@@ -113,10 +115,11 @@
     top: 20px;
     left: 20px;
     color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
     transition: 0.5s;
-    line-height: 0px;
+    background-image: url(/Content/Icones/White/Close.svg);
+    background-size: cover;
+    width: 28px;
+    height: 28px;
 }
 
 .screenButton {
@@ -124,32 +127,58 @@
     top: 20px;
     right: 20px;
     color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
     transition: 0.5s;
-    line-height: 0px;
+    background-size: cover;
+    width: 28px;
+    height: 28px;
 }
 
-.previous {
+#maxScreenButton {
+    background-image: url(/Content/Icones/White/FullScreen.svg);
+}
+
+#defaultScreenButton {
+    background-image: url(/Content/Icones/White/DefaultScreen.svg);
+}
+
+#previousButton {
     position: absolute;
     top: 100px;
     left: 20px;
     color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
     transition: 0.5s;
-    line-height: 0px;
+    width: 28px;
+    height: 28px;
+    background-image: url(/Content/Icones/White/LeftArrow.svg);
+    background-size: cover;
 }
 
-.next {
+#previousArea {
+    position: absolute;
+    top: 5%;
+    left: 0px;
+    width: 48%;
+    height: 90%;
+}
+
+#nextButton {
     position: absolute;
     top: 100px;
     right: 20px;
     color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
     transition: 0.5s;
-    line-height: 0px;
+    width: 28px;
+    height: 28px;
+    background-image: url(/Content/Icones/White/RightArrow.svg);
+    background-size: cover;
+}
+
+#nextArea {
+    position: absolute;
+    top:5%;
+    right: 0px;
+    width: 48%;
+    height: 90%;
 }
 
 .close:hover, .close:focus {
@@ -172,3 +201,4 @@
         margin: 0.4%;
     }
 }
+
