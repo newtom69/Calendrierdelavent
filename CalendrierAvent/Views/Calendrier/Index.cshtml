@@ -37,11 +37,14 @@
         <div id="previousButton" class="previous">&blacktriangleleft;</div>
         <div id="nextButton" class="next">&blacktriangleright;</div>
         <div id="closeButton" class="close">&Cross;</div>
+        <div id="maxScreenButton" class="screenButton" onclick="MaxScreen();">M</div>
+        <div id="defaultScreenButton" class="screenButton" onclick="DefaultScreen();">n</div>
         <div id="caption"></div>
     </div>
 </div>
 
 <script>
+    var largeImageAndButtons = document.getElementById("largeImageAndButtons");
     var popup = document.getElementById("PopupPicture");
     var imageToPopup = document.getElementById("imageToPopup");
     var pictureLink = document.getElementById("pictureLink");
@@ -49,12 +52,31 @@
     var closeButton = document.getElementById("closeButton");
     var previousButton = document.getElementById("previousButton");
     var nextButton = document.getElementById("nextButton");
+    var maxScreenButton = document.getElementById("maxScreenButton");
+    var defaultScreenButton = document.getElementById("defaultScreenButton");
+
+    var Default_captionText_style_display = captionText.style.display;
+    var Default_largeImageAndButtons_style_width = largeImageAndButtons.style.width;
+    var Default_largeImageAndButtons_style_height = largeImageAndButtons.style.height;
+    var Default_popup_style_padding = popup.style.padding;
+    var Default_popup_style_width = popup.style.width;
+    var Default_popup_style_height = popup.style.height;
+
+    var Max_captionText_style_display = 'none';
+    var Max_largeImageAndButtons_style_width = '100%';
+    var Max_largeImageAndButtons_style_height = '100%';
+    var Max_popup_style_padding = '0px';
+    var Max_popup_style_width = '100%';
+    var Max_popup_style_height = '100%';
 
     closeButton.onclick = function () {
+        DefaultScreen();
         popup.style.display = "none";
     }
 
-    window.addEventListener("resize", Resize);
+    window.addEventListener("resize", AlignNextPreviousButtons);
+    defaultScreenButton.style.display = 'none';
+
 
     function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
 
@@ -76,9 +98,8 @@
         }
 
         setTimeout(function () {
-            Resize();
+            AlignNextPreviousButtons();
         }, 100);
-
 
         popup.style.display = 'block';
         imageToPopup.src = pictureToShowPermanently.src;
@@ -93,9 +114,64 @@
         boxToHidePermanently.style.display = 'none';
     }
 
-    function Resize() {
+    function AlignNextPreviousButtons() {
         nextButton.style.top = document.getElementById("imageToPopup").clientHeight / 2 + "px";
         previousButton.style.top = document.getElementById("imageToPopup").clientHeight/2 +"px" ;
     }
+
+    function MaxScreen() {
+        captionText.style.display = Max_captionText_style_display;
+        largeImageAndButtons.style.width = Max_largeImageAndButtons_style_width;
+        largeImageAndButtons.style.height = Max_largeImageAndButtons_style_height;
+        popup.style.padding = Max_popup_style_padding;
+        popup.style.width = Max_popup_style_width;
+        popup.style.height = Max_popup_style_height;
+        maxScreenButton.style.display = 'none';
+        defaultScreenButton.style.display = 'block';
+        OpenFullScreen();
+    }
+
+    function DefaultScreen() {
+        captionText.style.display = Default_captionText_style_display;
+        largeImageAndButtons.style.width = Default_largeImageAndButtons_style_width;
+        largeImageAndButtons.style.height = Default_largeImageAndButtons_style_height;
+        popup.style.padding = Default_popup_style_padding;
+        popup.style.width = Default_popup_style_width;
+        popup.style.height = Default_popup_style_height;
+        defaultScreenButton.style.display = 'none';
+        maxScreenButton.style.display = 'block';
+        CloseFullScreen();
+    }
+
+    function OpenFullScreen() {
+        if (largeImageAndButtons.requestFullscreen) {
+            largeImageAndButtons.requestFullscreen();
+        } else if (largeImageAndButtons.mozRequestFullScreen) { /* Firefox */
+            largeImageAndButtons.mozRequestFullScreen();
+        } else if (largeImageAndButtons.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            largeImageAndButtons.webkitRequestFullscreen();
+        } else if (largeImageAndButtons.msRequestFullscreen) { /* IE/Edge */
+            largeImageAndButtons.msRequestFullscreen();
+        }
+    }
+
+    function CloseFullScreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { /* Firefox */
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE/Edge */
+            document.msExitFullscreen();
+        }
+    } 
+
+
+
+
+
+
+
 
 </script>
