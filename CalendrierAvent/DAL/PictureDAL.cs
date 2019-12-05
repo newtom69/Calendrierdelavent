@@ -1,5 +1,4 @@
-﻿using AdventCalendar.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -10,13 +9,13 @@ namespace AdventCalendar.DAL
     public class PictureDAL
     {
 
-        public Picture Details(int calendrierId, int dayNumber)
+        public Picture Details(int calendarId, int dayNumber)
         {
             using (AdventCalendarEntities db = new AdventCalendarEntities())
             {
                 Picture picture = (from p in db.Picture
                                    join c in db.Calendar on p.CalendarId equals c.Id
-                                   where p.CalendarId == calendrierId && p.DayNumber == dayNumber
+                                   where p.CalendarId == calendarId && p.DayNumber == dayNumber
                                    select p).FirstOrDefault();
 
                 return picture;
@@ -25,7 +24,7 @@ namespace AdventCalendar.DAL
 
         public Dictionary<int, string> Dictionary(int calendarId, int dayNumber = 31)
         {
-            string calendarPath = new CalendarDAL().GetEncryptedName(calendarId);
+            string calendarPath = new CalendarDAL().Details(calendarId).PublicName;
             string openPicturePath = Path.Combine(ConfigurationManager.AppSettings["PicturePath"], calendarPath);
 
             using (AdventCalendarEntities db = new AdventCalendarEntities())
@@ -38,20 +37,31 @@ namespace AdventCalendar.DAL
             }
         }
 
-        public void Add(int calendarId, int dayNumber)
+        public void Add(int calendarId, int dayNumber, string name)
         {
-            Picture picture = new Picture()
-            {
-                CalendarId = calendarId,
-                DayNumber = dayNumber,
-                Name = Guid.NewGuid().ToString("n"),
-            };
             using (AdventCalendarEntities db = new AdventCalendarEntities())
             {
-                db.Picture.Add(picture);
+                Picture picture = (from p in db.Picture
+                                   join c in db.Calendar on p.CalendarId equals c.Id
+                                   where p.CalendarId == calendarId && p.DayNumber == dayNumber
+                                   select p).FirstOrDefault();
+
+                if (picture == null)
+                {
+                    picture = new Picture()
+                    {
+                        CalendarId = calendarId,
+                        DayNumber = dayNumber,
+                        Name = name,
+                    };
+                    db.Picture.Add(picture);
+                }
+                else
+                {
+                    picture.Name = name;
+                }
                 db.SaveChanges();
             }
         }
-
     }
 }

@@ -21,12 +21,13 @@ namespace AdventCalendar
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string EncryptedName { get; set; }
+        public string DisplayName { get; set; }
+        public string PublicName { get; set; }
+        public string PrivateName { get; set; }
         public int BoxId { get; set; }
     
+        public virtual Box Box { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Picture> Picture { get; set; }
-        public virtual Box Box { get; set; }
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AdventCalendar.Models
+namespace AdventCalendar
 {
     using System;
     using System.Data.Entity;
@@ -25,8 +25,8 @@ namespace AdventCalendar.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Box> Box { get; set; }
         public virtual DbSet<Calendar> Calendar { get; set; }
         public virtual DbSet<Picture> Picture { get; set; }
-        public virtual DbSet<Box> Box { get; set; }
     }
 }

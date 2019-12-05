@@ -1,6 +1,5 @@
 ﻿@using AdventCalendar.ViewModels
 @model CalendarViewModel
-
 @{
     ViewBag.Title = "Index";
     int dayNumber = DateTime.Today.Day;
@@ -8,26 +7,29 @@
     const string PicturePreffix = "pict";
 
 }
+@if (Model != null)
+{
+    <h1>Calendrier de l'Avent pour @Model.Calendar.DisplayName</h1>
+    <div class="Calendar">
+        @for (int i = 1; i <= Model.GenericsPicturesNames.Count; i++)
+        {
+            string currentBox = BoxPreffix + i;
+            string currentPicture = PicturePreffix + i;
+            <div class="BoxAndPicture">
+                <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
+                @if (Model.PicturesNames.ContainsKey(i))
+                {
+                    <img id="@currentPicture" class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="Popup_ShowPictures_HideBox(this, @currentBox);" onmouseover="ShowPicture_HideBox(this, @currentBox);" />
+                }
+                else
+                {
+                    <img class="hover" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
+                }
+            </div>
+        }
+    </div>
+}
 
-<h1>Calendrier de l'Avent de @ViewBag.CalendarName</h1>
-<div class="Calendar">
-    @for (int i = 1; i <= Model.GenericsPicturesNames.Count; i++)
-    {
-        string currentBox = BoxPreffix + i;
-        string currentPicture = PicturePreffix + i;
-        <div class="BoxAndPicture">
-            <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
-            @if (Model.PicturesNames.ContainsKey(i))
-            {
-                <img id="@currentPicture" class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="Popup_ShowPictures_HideBox(this, @currentBox);" onmouseover="ShowPicture_HideBox(this, @currentBox);" />
-            }
-            else
-            {
-                <img class="hover" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
-            }
-        </div>
-    }
-</div>
 
 <div id="PopupPicture" class="popup">
     <div id="largeImageAndButtons" ontouchstart="TouchStart()" ontouchmove="TouchMove()" ontouchend="TouchEnd()">

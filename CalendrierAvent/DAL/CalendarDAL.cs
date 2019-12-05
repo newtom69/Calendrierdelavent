@@ -1,5 +1,4 @@
-﻿using AdventCalendar.Models;
-using AdventCalendar.Tools;
+﻿using AdventCalendar.Tools;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,12 +19,23 @@ namespace AdventCalendar.DAL
             }
         }
 
-        public Calendar Details(string name)
+        public Calendar DetailsByPublicName(string publicName)
         {
             using (AdventCalendarEntities db = new AdventCalendarEntities())
             {
                 Calendar calendar = (from c in db.Calendar
-                                     where c.EncryptedName == name
+                                     where c.PublicName == publicName
+                                     select c).FirstOrDefault();
+                return calendar;
+            }
+        }
+
+        public Calendar DetailsByPrivateName(string privateName)
+        {
+            using (AdventCalendarEntities db = new AdventCalendarEntities())
+            {
+                Calendar calendar = (from c in db.Calendar
+                                     where c.PrivateName == privateName
                                      select c).FirstOrDefault();
                 return calendar;
             }
@@ -41,41 +51,6 @@ namespace AdventCalendar.DAL
             }
         }
 
-        public string GetName(string name)
-        {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                string shortName = (from c in db.Calendar
-                                    where c.EncryptedName == name
-                                    select c.Name).FirstOrDefault();
-                return shortName;
-            }
-        }
-
-        public string GetEncryptedName(int id)
-        {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                string encryptedName = (from c in db.Calendar
-                                        where c.Id == id
-                                        select c.EncryptedName).FirstOrDefault();
-                return encryptedName;
-            }
-        }
-
-        public string Path(string name)
-        {
-            char separator = ConfigurationManager.AppSettings["SeparatorChar"][0];
-            Calendar calendar = Details(name);
-            if (calendar != null)
-            {
-                int index = calendar.EncryptedName.IndexOf(separator);
-                return calendar.EncryptedName.Substring(0, index + 1);
-            }
-            else
-                return "";
-        }
-
         public Dictionary<int, string> PicturesList(int id, DateTime date)
         {
             if (date.Month == 12)
@@ -84,36 +59,41 @@ namespace AdventCalendar.DAL
                 return new Dictionary<int, string>();
         }
 
-        public Dictionary<int, string> Dictionary(string name, DateTime? date = null)
+        public Dictionary<int, string> Dictionary(int id, DateTime? date = null)
         {
             DateTime dateOk = date ?? DateTime.MaxValue;
             if (dateOk == DateTime.MaxValue)
             {
-                return new PictureDAL().Dictionary(Details(name).Id);
+                return new PictureDAL().Dictionary(id);
             }
             else
             {
                 if (dateOk.Month == 12)
-                    return new PictureDAL().Dictionary(Details(name).Id, dateOk.Day);
+                    return new PictureDAL().Dictionary(id, dateOk.Day);
                 else
                     return new Dictionary<int, string>();
             }
         }
 
-        public void Add(string name)
+        public string Add(string name)
         {
             name = name.Replace("-", "");
-            string randomSuffix = "-" + Tool.RandomAsciiPrintable(6);
+            string randomPublicSuffix = "-" + Tool.RandomAsciiPrintable(6);
+            string randomPrivateSuffix = "-" + Tool.RandomAsciiPrintable(10);
             Calendar calendar = new Calendar()
             {
-                Name = name,
-                EncryptedName = name + randomSuffix,
+                DisplayName = name,
+                PublicName = name + randomPublicSuffix,
+                PrivateName = name + randomPrivateSuffix,
+                BoxId = 1 //TODO
             };
             using (AdventCalendarEntities db = new AdventCalendarEntities())
             {
                 db.Calendar.Add(calendar);
                 db.SaveChanges();
             }
+
+            return calendar.PrivateName;
         }
     }
 }

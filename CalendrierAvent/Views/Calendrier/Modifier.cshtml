@@ -1,0 +1,53 @@
+﻿@using AdventCalendar.ViewModels
+@model CalendarViewModel
+
+@{
+    ViewBag.Title = "Index";
+    string publicUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{Model.Calendar.PublicName}";
+    string privateUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{Model.Calendar.PrivateName}";
+}
+
+<h1>Calendrier de l'Avent de @Model.Calendar.DisplayName</h1>
+<h4>Cliquez sur l'image à changer</h4>
+<p>Lien du calendrier privé (permet la modification) : <a href="@privateUrl" target="_blank">@privateUrl</a></p>
+<p>Lien du calendrier publique : <a href="@publicUrl" target="_blank">@publicUrl</a></p>
+@using (Html.BeginForm("Modifier", "Calendrier", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="Calendar">
+        <input name="privateName" type="hidden" value="@Model.Calendar.PrivateName">
+        @for (int i = 1; i <= Model.GenericsPicturesNames.Count; i++)
+        {
+            string currentPicture = "Picture" + i;
+            string inputId = "input" + i;
+            <div class="BoxAndPicture">
+                <label for="@inputId">
+                    @if (Model.PicturesNames.ContainsKey(i))
+                    {
+                        <img id="@currentPicture" src="@Model.PicturesNames[i]" alt="@(i)" />
+                    }
+                    else
+                    {
+                        <img id="@currentPicture" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
+                    }
+                </label>
+            </div>
+            <input id="@inputId" hidden="hidden" onchange="changePicture(this, '#@currentPicture'); this.form.submit();" name="files" type="file" accept="image/*" maxlength='100'>
+        }
+    </div>
+}
+
+
+
+<script>
+    function changePicture(input, imageIdToChange) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(imageIdToChange)
+                    .attr('src', e.target.result)
+                    .width(300);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

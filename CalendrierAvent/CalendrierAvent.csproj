@@ -128,9 +128,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\CalendrierController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ImageController.cs" />
     <Compile Include="Controllers\CalendrierController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
@@ -225,12 +222,9 @@
     <Content Include="Models\AdventCalendar.edmx.diagram">
       <DependentUpon>AdventCalendar.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\web.config" />
-    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Admin\Views\Calendrier\Ajouter.cshtml" />
-    <Content Include="Areas\Admin\Views\Calendrier\Liste.cshtml" />
-    <Content Include="Areas\Admin\Views\Calendrier\Details.cshtml" />
+    <Content Include="Views\Calendrier\Ajouter.cshtml" />
+    <Content Include="Views\Calendrier\Liste.cshtml" />
+    <Content Include="Views\Calendrier\Modifier.cshtml" />
     <None Include="Properties\PublishProfiles\ftp Ikoula.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -254,15 +248,11 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Calendrier\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\Pictures\" />
     <Folder Include="Content\Photos\" />
-    <Folder Include="Views\Photo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

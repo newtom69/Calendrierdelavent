@@ -1,0 +1,11 @@
+﻿@model List<Calendar>
+@{
+    ViewBag.Title = "Liste";
+}
+
+<h2>Liste</h2>
+
+@foreach (Calendar calendar in Model)
+{
+    <p>@calendar.Id - @calendar.PrivateName</p>
+}
