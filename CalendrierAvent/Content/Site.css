@@ -20,7 +20,6 @@
 }
 
 .BoxAndPicture {
-    display: grid;
     align-self: center;
     width: 14%;
     height: 14%;

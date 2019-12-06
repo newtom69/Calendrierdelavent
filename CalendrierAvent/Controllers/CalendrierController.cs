@@ -86,29 +86,43 @@ namespace AdventCalendar.Controllers
         }
 
         [HttpPost]
-        public ActionResult Modifier(string privateName, List<HttpPostedFileBase> files)
+        public ActionResult Modifier(string privateName, HttpPostedFileBase file, int dayNumber)
         {
             Calendar calendar = new CalendarDAL().DetailsByPrivateName(privateName);
             int calendarId = calendar.Id;
             string publicName = calendar.PublicName;
             PictureDAL pictureDAL = new PictureDAL();
-            for (int i = 0; i < files.Count; i++) //TODO change for no loop
-            {
-                if (files[i] != null)
-                {
-                    int dayNumber = i + 1;
-                    string directoryName = Path.Combine(Server.MapPath(ConfigurationManager.AppSettings["PicturePath"]), publicName);
-                    string extension = Path.GetExtension(files[i].FileName);
-                    if (extension.Length > 5)
-                        extension = extension.Substring(0, 5);
 
-                    string fileName = Guid.NewGuid().ToString("n") + extension;
-                    string fullFileName = Path.Combine(directoryName, fileName);
-                    Directory.CreateDirectory(directoryName);
-                    using (Image image = Image.FromStream(files[i].InputStream))
-                        image.Save(fullFileName);
-                    pictureDAL.Add(calendarId, dayNumber, fileName);
+            if (file != null)
+            {
+                string directoryName = Path.Combine(Server.MapPath(ConfigurationManager.AppSettings["PicturePath"]), publicName);
+                string extension = Path.GetExtension(file.FileName);
+                if (extension.Length > 5)
+                    extension = extension.Substring(0, 5);
+                string fileName = Guid.NewGuid().ToString("n") + extension;
+                string fullFileName = Path.Combine(directoryName, fileName);
+                Directory.CreateDirectory(directoryName);
+                using (FileStream fileStream = new FileStream(fullFileName, FileMode.Create))
+                {
+                    file.InputStream.Seek(0, SeekOrigin.Begin);
+                    file.InputStream.CopyTo(fileStream);
                 }
+                #region futurFeature
+                //if (extension == ".webp")
+                //{
+                //    using (FileStream fileStream = new FileStream(fullFileName, FileMode.Create))
+                //    {
+                //        files[i].InputStream.Seek(0, SeekOrigin.Begin);
+                //        files[i].InputStream.CopyTo(fileStream);
+                //    }
+                //}
+                //else
+                //{
+                //    using (Image image = Image.FromStream(files[i].InputStream))
+                //        image.Save(fullFileName);
+                //}
+                #endregion
+                pictureDAL.Add(calendarId, dayNumber, fileName);
             }
             return Redirect($"{ Request.Url.Scheme}://{Request.Url.Authority}/{privateName}");
         }
