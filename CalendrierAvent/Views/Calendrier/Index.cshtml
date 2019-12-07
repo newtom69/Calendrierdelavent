@@ -32,7 +32,7 @@
 }
 
 
-<div id="popupPicture" class="popup" ontouchstart="TouchStart()" ontouchmove="TouchMove()" ontouchend="TouchEnd()">
+<div id="popupPicture" class="popup" ontouchstart="TouchStart()" ontouchmove="TouchMove()" ontouchend="TouchEnd()" onmousemove="ShowButtonsCursor()">
     <div id="largeImageAndButtons">
         <img id="imagePopup" class="popup-content">
         <div id="caption"></div>
@@ -40,7 +40,7 @@
         <div id="nextButton" class="next"></div>
         <div id="previousArea"></div>
         <div id="nextArea"></div>
-        <div class="close" onclick="DefaultScreen(); Popup.style.display = 'none';"></div>
+        <div id="closeButton" class="close" onclick="DefaultScreen(); Popup.style.display = 'none';"></div>
         <div id="maxScreenButton" class="screenButton" onclick="MaxScreen();"></div>
         <div id="defaultScreenButton" class="screenButton" onclick="DefaultScreen();"></div>
     </div>
@@ -53,6 +53,7 @@
     var CaptionText = document.getElementById("caption");
     var MaxScreenButton = document.getElementById("maxScreenButton");
     var DefaultScreenButton = document.getElementById("defaultScreenButton");
+    var CloseButton = document.getElementById("closeButton");
     var PreviousArea = document.getElementById("previousArea");
     var NextArea = document.getElementById("nextArea");
     var PreviousButton = document.getElementById("previousButton");
@@ -75,10 +76,16 @@
     var NextPicture;
     var PreviousBox;
     var NextBox;
+    var IsMaxScreen;
+    var TimeoutHideBoutonsCursor;
 
     DefaultScreenButton.style.display = 'none';
 
     function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
+
+        OnMouseOutArea(PreviousButton);
+        OnMouseOutArea(NextButton);
+        ScheduleHideButtonsCursor();
 
         var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) - 1);
         var nextPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) + 1);
@@ -97,10 +104,19 @@
                 Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
             }
             PreviousArea.onmouseover = function () {
-                OnMouseOver(PreviousButton);
+                OnMouseInArea(PreviousButton);
+            }
+            PreviousArea.onmousemove = function () {
+                OnMouseInArea(PreviousButton);
+            }
+            PreviousArea.TouchStart = function () {
+                OnMouseInArea(PreviousButton);
             }
             PreviousArea.onmouseout = function () {
-                OnMouseOut(PreviousButton);
+                OnMouseOutArea(PreviousButton);
+            }
+            PreviousArea.TouchEnd = function () {
+                OnMouseOutArea(PreviousButton);
             }
         }
         else {
@@ -115,12 +131,20 @@
                 Popup_ShowPictures_HideBox(NextPicture, NextBox);
             }
             NextArea.onmouseover = function () {
-                OnMouseOver(NextButton);
+                OnMouseInArea(NextButton);
+            }
+            NextArea.onmousemove = function () {
+                OnMouseInArea(NextButton);
+            }
+            NextArea.TouchStart = function () {
+                OnMouseInArea(NextButton);
             }
             NextArea.onmouseout = function () {
-                OnMouseOut(NextButton);
+                OnMouseOutArea(NextButton);
             }
-            
+            NextArea.TouchEnd = function () {
+                OnMouseOutArea(NextButton);
+            }
         }
         else {
             NextButton.style.display = 'none';
@@ -148,6 +172,7 @@
         Popup.style.height = Max_popup_style_height;
         MaxScreenButton.style.display = 'none';
         DefaultScreenButton.style.display = 'initial';
+        IsMaxScreen = true;
         OpenFullScreen();
     }
 
@@ -160,6 +185,7 @@
         Popup.style.height = Default_popup_style_height;
         DefaultScreenButton.style.display = 'none';
         MaxScreenButton.style.display = 'initial';
+        IsMaxScreen = false;
         CloseFullScreen();
     }
 
@@ -209,10 +235,16 @@
 
     function TouchEnd() {
         if (XDiff > 40 && PreviousPicture != null) {
+            ImagePopup.style.display = 'none';
             Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+            ImagePopup.style.display = 'initial';
+            ImagePopup.style.transform = 'translate('+XDiff+'px)';
         }
         else if (XDiff < -40 && NextPicture != null) {
+            ImagePopup.style.display = 'none';
             Popup_ShowPictures_HideBox(NextPicture, NextBox);
+            ImagePopup.style.display = 'initial';
+            ImagePopup.style.transform = 'translate('+XDiff+'px)';
         }
         ImagePopup.style.transform = 'translate(0px)';
     }
@@ -220,19 +252,56 @@
     function KeyDown() {
         if (window.event.keyCode == 37 && PreviousPicture != null) {
             Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+            HideButtonsCursor();
         }
         if (window.event.keyCode == 39 && NextPicture != null) {
             Popup_ShowPictures_HideBox(NextPicture, NextBox);
+            HideButtonsCursor();
         }
     }
 
-    function OnMouseOver(element) {
+    function OnMouseInArea(element) {
         element.style.cursor = 'pointer';
         element.style.backgroundColor = '#808080';
     }
-    function OnMouseOut(element) {
+
+    function OnMouseOutArea(element) {
         element.style.cursor = 'initial';
         element.style.backgroundColor = 'initial';
+    }
+
+    function HideButtonsCursor() {
+        PreviousButton.style.display = 'none';
+        NextButton.style.display = 'none';
+        CloseButton.style.display = 'none';
+        MaxScreenButton.style.display = 'none';
+        DefaultScreenButton.style.display = 'none';
+        Popup.style.cursor = 'none';
+        PreviousArea.style.cursor = 'none';
+        NextArea.style.cursor = 'none';
+    }
+
+    function ShowButtonsCursor() {
+        Popup.style.cursor = 'initial';
+        PreviousArea.style.cursor = 'pointer';
+        NextArea.style.cursor = 'pointer';
+        CloseButton.style.display = 'initial';
+        if (PreviousPicture != null)
+            PreviousButton.style.display = 'initial';
+        if (NextPicture != null)
+            NextButton.style.display = 'initial';
+        if (IsMaxScreen)
+            DefaultScreenButton.style.display = 'initial';
+        else
+            MaxScreenButton.style.display = 'initial';
+        ScheduleHideButtonsCursor();
+    }
+
+    function ScheduleHideButtonsCursor() {
+        clearTimeout(TimeoutHideBoutonsCursor);
+        TimeoutHideBoutonsCursor = setTimeout(function () {
+            HideButtonsCursor();
+        }, 800);
     }
 
 </script>

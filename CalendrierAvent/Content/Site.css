@@ -66,7 +66,6 @@
     max-height: 100%;
     margin: auto;
     display: block;
-    cursor: none;
 }
 
 #largeImageAndButtons {
@@ -122,7 +121,6 @@
 .close {
     position: absolute;
     top: 20px;
-    left: 20px;
     color: #f1f1f1;
     transition: 0.5s;
     width: 36px;
@@ -137,7 +135,6 @@
 .screenButton {
     position: absolute;
     top: 20px;
-    right: 20px;
     color: #f1f1f1;
     transition: 0.5s;
     background-size: cover;
@@ -161,7 +158,6 @@
     position: absolute;
     z-index: 3;
     top: 50%;
-    left: 20px;
     color: #f1f1f1;
     transition: 0.5s;
     width: 36px;
@@ -176,17 +172,17 @@
 #previousArea {
     position: absolute;
     z-index: 4;
-    top: 20%;
+    top: 30%;
     left: 0px;
-    width: 25%;
-    height: 60%;
+    width: 20%;
+    height: 40%;
+    border-radius: 50%;
 }
 
 #nextButton {
     position: absolute;
     z-index: 3;
     top: 50%;
-    right: 20px;
     color: #f1f1f1;
     transition: 0.5s;
     width: 36px;
@@ -201,10 +197,21 @@
 #nextArea {
     position: absolute;
     z-index: 4;
-    top: 20%;
+    top: 30%;
     right: 0px;
-    width: 25%;
-    height: 60%;
+    width: 20%;
+    height: 40%;
+    border-radius: 50%;
+}
+
+.close, #previousButton {
+    left: 1.5%;
+    /*animation-duration: 0.5s;*/
+}
+
+.screenButton, #nextButton {
+    right: 1.5%;
+    /*animation-duration: 0.5s;*/
 }
 
     #previousArea:hover, #previousArea:focus, #nextArea:hover, #nextArea:focus {
