@@ -32,7 +32,7 @@
 }
 
 
-<div id="PopupPicture" class="popup" ontouchstart="TouchStart()" ontouchmove="TouchMove()" ontouchend="TouchEnd()">
+<div id="popupPicture" class="popup" ontouchstart="TouchStart()" ontouchmove="TouchMove()" ontouchend="TouchEnd()">
     <div id="largeImageAndButtons">
         <img id="imagePopup" class="popup-content">
         <div id="caption"></div>
@@ -40,27 +40,30 @@
         <div id="nextButton" class="next"></div>
         <div id="previousArea"></div>
         <div id="nextArea"></div>
-        <div id="closeButton" class="close" onclick="DefaultScreen(); popup.style.display = 'none';"></div>
+        <div class="close" onclick="DefaultScreen(); Popup.style.display = 'none';"></div>
         <div id="maxScreenButton" class="screenButton" onclick="MaxScreen();"></div>
         <div id="defaultScreenButton" class="screenButton" onclick="DefaultScreen();"></div>
     </div>
 </div>
 
 <script>
-    var largeImageAndButtons = document.getElementById("largeImageAndButtons");
-    var popup = document.getElementById("PopupPicture");
-    var imagePopup = document.getElementById("imagePopup");
-    var captionText = document.getElementById("caption");
-    var closeButton = document.getElementById("closeButton");
-    var maxScreenButton = document.getElementById("maxScreenButton");
-    var defaultScreenButton = document.getElementById("defaultScreenButton");
+    var LargeImageAndButtons = document.getElementById("largeImageAndButtons");
+    var Popup = document.getElementById("popupPicture");
+    var ImagePopup = document.getElementById("imagePopup");
+    var CaptionText = document.getElementById("caption");
+    var MaxScreenButton = document.getElementById("maxScreenButton");
+    var DefaultScreenButton = document.getElementById("defaultScreenButton");
+    var PreviousArea = document.getElementById("previousArea");
+    var NextArea = document.getElementById("nextArea");
+    var PreviousButton = document.getElementById("previousButton");
+    var NextButton = document.getElementById("nextButton");
 
-    var Default_captionText_style_display = captionText.style.display;
-    var Default_largeImageAndButtons_style_width = largeImageAndButtons.style.width;
-    var Default_largeImageAndButtons_style_height = largeImageAndButtons.style.height;
-    var Default_popup_style_padding = popup.style.padding;
-    var Default_popup_style_width = popup.style.width;
-    var Default_popup_style_height = popup.style.height;
+    var Default_captionText_style_display = CaptionText.style.display;
+    var Default_largeImageAndButtons_style_width = LargeImageAndButtons.style.width;
+    var Default_largeImageAndButtons_style_height = LargeImageAndButtons.style.height;
+    var Default_popup_style_padding = Popup.style.padding;
+    var Default_popup_style_width = Popup.style.width;
+    var Default_popup_style_height = Popup.style.height;
 
     var Max_captionText_style_display = 'none';
     var Max_largeImageAndButtons_style_width = '100%';
@@ -73,7 +76,7 @@
     var PreviousBox;
     var NextBox;
 
-    defaultScreenButton.style.display = 'none';
+    DefaultScreenButton.style.display = 'none';
 
     function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
 
@@ -88,32 +91,45 @@
         NextBox = document.getElementById(nextBoxId);
 
         if (PreviousPicture != null) {
-            document.getElementById("previousButton").style.display = 'initial';
-            document.getElementById("previousArea").style.display = 'initial';
-            document.getElementById("previousArea").onclick = function () {
+            PreviousButton.style.display = 'initial';
+            PreviousArea.style.display = 'initial';
+            PreviousArea.onclick = function () {
                 Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+            }
+            PreviousArea.onmouseover = function () {
+                OnMouseOver(PreviousButton);
+            }
+            PreviousArea.onmouseout = function () {
+                OnMouseOut(PreviousButton);
             }
         }
         else {
-            document.getElementById("previousButton").style.display = 'none';
-            document.getElementById("previousArea").style.display = 'none';
+            PreviousButton.style.display = 'none';
+            PreviousArea.style.display = 'none';
         }
 
         if (NextPicture != null) {
-            document.getElementById("nextButton").style.display = 'initial';
-            document.getElementById("nextArea").style.display = 'initial';
-            document.getElementById("nextArea").onclick = function () {
+            NextButton.style.display = 'initial';
+            NextArea.style.display = 'initial';
+            NextArea.onclick = function () {
                 Popup_ShowPictures_HideBox(NextPicture, NextBox);
             }
+            NextArea.onmouseover = function () {
+                OnMouseOver(NextButton);
+            }
+            NextArea.onmouseout = function () {
+                OnMouseOut(NextButton);
+            }
+            
         }
         else {
-            document.getElementById("nextButton").style.display = 'none';
-            document.getElementById("nextArea").style.display = 'none';
+            NextButton.style.display = 'none';
+            NextArea.style.display = 'none';
         }
 
-        popup.style.display = 'block';
-        imagePopup.src = pictureToShowPermanently.src;
-        captionText.innerHTML = pictureToShowPermanently.alt;
+        Popup.style.display = 'block';
+        ImagePopup.src = pictureToShowPermanently.src;
+        CaptionText.innerHTML = pictureToShowPermanently.alt;
         ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
     }
 
@@ -124,38 +140,38 @@
     }
 
     function MaxScreen() {
-        captionText.style.display = Max_captionText_style_display;
-        largeImageAndButtons.style.width = Max_largeImageAndButtons_style_width;
-        largeImageAndButtons.style.height = Max_largeImageAndButtons_style_height;
-        popup.style.padding = Max_popup_style_padding;
-        popup.style.width = Max_popup_style_width;
-        popup.style.height = Max_popup_style_height;
-        maxScreenButton.style.display = 'none';
-        defaultScreenButton.style.display = 'initial';
+        CaptionText.style.display = Max_captionText_style_display;
+        LargeImageAndButtons.style.width = Max_largeImageAndButtons_style_width;
+        LargeImageAndButtons.style.height = Max_largeImageAndButtons_style_height;
+        Popup.style.padding = Max_popup_style_padding;
+        Popup.style.width = Max_popup_style_width;
+        Popup.style.height = Max_popup_style_height;
+        MaxScreenButton.style.display = 'none';
+        DefaultScreenButton.style.display = 'initial';
         OpenFullScreen();
     }
 
     function DefaultScreen() {
-        captionText.style.display = Default_captionText_style_display;
-        largeImageAndButtons.style.width = Default_largeImageAndButtons_style_width;
-        largeImageAndButtons.style.height = Default_largeImageAndButtons_style_height;
-        popup.style.padding = Default_popup_style_padding;
-        popup.style.width = Default_popup_style_width;
-        popup.style.height = Default_popup_style_height;
-        defaultScreenButton.style.display = 'none';
-        maxScreenButton.style.display = 'initial';
+        CaptionText.style.display = Default_captionText_style_display;
+        LargeImageAndButtons.style.width = Default_largeImageAndButtons_style_width;
+        LargeImageAndButtons.style.height = Default_largeImageAndButtons_style_height;
+        Popup.style.padding = Default_popup_style_padding;
+        Popup.style.width = Default_popup_style_width;
+        Popup.style.height = Default_popup_style_height;
+        DefaultScreenButton.style.display = 'none';
+        MaxScreenButton.style.display = 'initial';
         CloseFullScreen();
     }
 
     function OpenFullScreen() {
-        if (largeImageAndButtons.requestFullscreen) {
-            largeImageAndButtons.requestFullscreen();
-        } else if (largeImageAndButtons.mozRequestFullScreen) { /* Firefox */
-            largeImageAndButtons.mozRequestFullScreen();
-        } else if (largeImageAndButtons.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-            largeImageAndButtons.webkitRequestFullscreen();
-        } else if (largeImageAndButtons.msRequestFullscreen) { /* IE/Edge */
-            largeImageAndButtons.msRequestFullscreen();
+        if (LargeImageAndButtons.requestFullscreen) {
+            LargeImageAndButtons.requestFullscreen();
+        } else if (LargeImageAndButtons.mozRequestFullScreen) { /* Firefox */
+            LargeImageAndButtons.mozRequestFullScreen();
+        } else if (LargeImageAndButtons.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            LargeImageAndButtons.webkitRequestFullscreen();
+        } else if (LargeImageAndButtons.msRequestFullscreen) { /* IE/Edge */
+            LargeImageAndButtons.msRequestFullscreen();
         }
     }
 
@@ -183,18 +199,40 @@
     function TouchMove() {
         XEnd = event.touches[0].clientX;
         XDiff = XEnd - XBegin;
+        if (XDiff > 0 && PreviousPicture != null) {
+            ImagePopup.style.transform = 'translate('+XDiff+'px)';
+        }
+        else if (XDiff < 0 && NextPicture != null) {
+            ImagePopup.style.transform = 'translate('+XDiff+'px)';
+        }
     }
 
     function TouchEnd() {
-        XDiff = XEnd - XBegin;
         if (XDiff > 40 && PreviousPicture != null) {
             Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
         }
         else if (XDiff < -40 && NextPicture != null) {
             Popup_ShowPictures_HideBox(NextPicture, NextBox);
         }
+        ImagePopup.style.transform = 'translate(0px)';
     }
 
+    function KeyDown() {
+        if (window.event.keyCode == 37 && PreviousPicture != null) {
+            Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+        }
+        if (window.event.keyCode == 39 && NextPicture != null) {
+            Popup_ShowPictures_HideBox(NextPicture, NextBox);
+        }
+    }
 
+    function OnMouseOver(element) {
+        element.style.cursor = 'pointer';
+        element.style.backgroundColor = '#808080';
+    }
+    function OnMouseOut(element) {
+        element.style.cursor = 'initial';
+        element.style.backgroundColor = 'initial';
+    }
 
 </script>

@@ -6,12 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     <link href="/Content/site.css" rel="stylesheet">
-    @*<link rel="stylesheet" href="//code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.css">*@
     <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-    @*<script src="//code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>*@
 </head>
-<body>
-
+<body onkeydown="KeyDown()">
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -19,9 +16,7 @@
             <p>&copy; @DateTime.Now.Year - Calendrier de l'Avent</p>
         </footer>
     </div>
-
     @Scripts.Render("~/bundles/jquery")
-
     @RenderSection("scripts", required: false)
 </body>
 </html>

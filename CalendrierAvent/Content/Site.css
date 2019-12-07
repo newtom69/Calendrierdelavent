@@ -66,11 +66,6 @@
     max-height: 100%;
     margin: auto;
     display: block;
-    /*position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);*/
 }
 
 #largeImageAndButtons {
@@ -79,16 +74,24 @@
     margin: auto;
     height: 94%;
     width: 100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #caption {
-    margin-top: 10px;
-    text-align: center;
+    position: fixed;
+    bottom: 3.5%;
+    left: 50%;
+    transform: translateX(-50%);
     color: #ccc;
     font-size: larger;
+    transform: translateY(50%);
 }
 
-.popup-content, #caption {
+.popup-content {
     -webkit-animation-name: zoom;
     -webkit-animation-duration: 0.5s;
     animation-name: zoom;
@@ -121,10 +124,13 @@
     left: 20px;
     color: #f1f1f1;
     transition: 0.5s;
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
     background-image: url(/Content/Icones/White/Close.svg);
-    background-size: cover;
-    width: 24px;
-    height: 24px;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .screenButton {
@@ -134,8 +140,12 @@
     color: #f1f1f1;
     transition: 0.5s;
     background-size: cover;
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #maxScreenButton {
@@ -148,48 +158,61 @@
 
 #previousButton {
     position: absolute;
+    z-index: 3;
     top: 50%;
     left: 20px;
     color: #f1f1f1;
     transition: 0.5s;
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
     background-image: url(/Content/Icones/White/LeftArrow.svg);
-    background-size: cover;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #previousArea {
     position: absolute;
-    top: 5%;
+    z-index: 4;
+    top: 20%;
     left: 0px;
-    width: 48%;
-    height: 90%;
+    width: 25%;
+    height: 60%;
 }
 
 #nextButton {
     position: absolute;
+    z-index: 3;
     top: 50%;
     right: 20px;
     color: #f1f1f1;
     transition: 0.5s;
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
     background-image: url(/Content/Icones/White/RightArrow.svg);
-    background-size: cover;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #nextArea {
     position: absolute;
-    top: 5%;
+    z-index: 4;
+    top: 20%;
     right: 0px;
-    width: 48%;
-    height: 90%;
+    width: 25%;
+    height: 60%;
 }
 
-.close:hover, .close:focus {
-    color: #bbb;
-    text-decoration: none;
+    #previousArea:hover, #previousArea:focus, #nextArea:hover, #nextArea:focus {
+        cursor: pointer;
+    }
+
+.close:hover, .close:focus, #nextButton:hover, #nextButton:focus, #maxScreenButton:hover, #maxScreenButton:focus, #defaultScreenButton:hover, #defaultScreenButton:focus {
     cursor: pointer;
+    background-color: #808080
 }
 
 @media only screen and (max-width: 700px) {
