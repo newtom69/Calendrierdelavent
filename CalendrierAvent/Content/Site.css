@@ -66,9 +66,15 @@
     max-height: 100%;
     margin: auto;
     display: block;
+    /*position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);*/
 }
 
 #largeImageAndButtons {
+    display: flex;
     position: relative;
     margin: auto;
     height: 94%;
@@ -76,10 +82,10 @@
 }
 
 #caption {
-    margin-top:10px;
+    margin-top: 10px;
     text-align: center;
     color: #ccc;
-    font-size:larger;
+    font-size: larger;
 }
 
 .popup-content, #caption {
@@ -117,8 +123,8 @@
     transition: 0.5s;
     background-image: url(/Content/Icones/White/Close.svg);
     background-size: cover;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
 }
 
 .screenButton {
@@ -142,7 +148,7 @@
 
 #previousButton {
     position: absolute;
-    top: 100px;
+    top: 50%;
     left: 20px;
     color: #f1f1f1;
     transition: 0.5s;
@@ -162,7 +168,7 @@
 
 #nextButton {
     position: absolute;
-    top: 100px;
+    top: 50%;
     right: 20px;
     color: #f1f1f1;
     transition: 0.5s;
@@ -174,7 +180,7 @@
 
 #nextArea {
     position: absolute;
-    top:5%;
+    top: 5%;
     right: 0px;
     width: 48%;
     height: 90%;
@@ -200,4 +206,3 @@
         margin: 0.4%;
     }
 }
-

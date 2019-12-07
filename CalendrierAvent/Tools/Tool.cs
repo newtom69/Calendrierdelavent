@@ -78,25 +78,25 @@ namespace AdventCalendar.Tools
             return orig;
         }
 
-        public static bool EnvoieMail(string destinataire, string objet, string corpsMessage, MemoryStream pieceJointe = null, string reponseA = "")
+        public static bool EnvoieMail(string sendTo, string objectMail, string messageMail, MemoryStream attachment = null, string replyTo = "")
         {
             try
             {
                 using (MailMessage message = new MailMessage())
                 {
-                    string mailFoodTruck = ConfigurationManager.AppSettings["MailFoodTruck"];
-                    if (reponseA == "")
-                        reponseA = mailFoodTruck;
-                    message.From = new MailAddress(mailFoodTruck);
-                    message.To.Add(destinataire);
-                    message.Subject = objet;
-                    message.ReplyToList.Add(reponseA);
-                    message.Body = corpsMessage;
+                    string mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+                    if (replyTo == "")
+                        replyTo = mailInfo;
+                    message.From = new MailAddress(mailInfo);
+                    message.To.Add(sendTo);
+                    message.Subject = objectMail;
+                    message.ReplyToList.Add(replyTo);
+                    message.Body = messageMail;
                     message.IsBodyHtml = false;
-                    if (pieceJointe != null)
+                    if (attachment != null)
                     {
-                        pieceJointe.Position = 0;
-                        System.Net.Mail.Attachment data = new System.Net.Mail.Attachment(pieceJointe, "event.ics", "text/calendar");
+                        attachment.Position = 0;
+                        System.Net.Mail.Attachment data = new System.Net.Mail.Attachment(attachment, "event.ics", "text/calendar");
                         message.Attachments.Add(data);
                     }
                     using (SmtpClient client = new SmtpClient())

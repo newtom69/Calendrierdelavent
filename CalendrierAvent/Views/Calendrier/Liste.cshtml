@@ -1,11 +1,26 @@
 ﻿@model List<Calendar>
 @{
-    ViewBag.Title = "Liste";
+    ViewBag.Title = "Liste des calendriers";
 }
 
-<h2>Liste</h2>
+<h2>Liste des calendriers</h2>
 
-@foreach (Calendar calendar in Model)
+@using (Html.BeginForm("Liste", "Calendrier", FormMethod.Post))
 {
-    <p>@calendar.Id - @calendar.PrivateName</p>
+    <p><input name="password" type="password" title="Mot de passe" placeholder="Mot de passe" maxlength='20' size="20" required></p>
+    <p><input type="submit" value="Voir liste"></p>
+}
+
+@if (ViewBag.Message != null)
+{<p>@ViewBag.Message</p>}
+
+@if (Model != null)
+{
+    foreach (Calendar calendar in Model)
+    {
+        string privateUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{calendar.PrivateName}";
+        string publicUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{calendar.PublicName}";
+        <p>@calendar.Id - lien privé : <a href="@privateUrl" target="_blank">@calendar.PrivateName</a> - lien public : <a href="@publicUrl" target="_blank">@calendar.PublicName</a></p>
+
+    }
 }

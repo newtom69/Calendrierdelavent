@@ -75,7 +75,7 @@ namespace AdventCalendar.DAL
             }
         }
 
-        public string Add(string name)
+        public Calendar Add(string name)
         {
             name = name.Replace("-", "");
             string randomPublicSuffix = "-" + Tool.RandomAsciiPrintable(6);
@@ -93,7 +93,7 @@ namespace AdventCalendar.DAL
                 db.SaveChanges();
             }
 
-            return calendar.PrivateName;
+            return calendar;
         }
     }
 }

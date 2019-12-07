@@ -1,4 +1,5 @@
 ﻿using AdventCalendar.DAL;
+using AdventCalendar.Tools;
 using AdventCalendar.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -48,19 +49,48 @@ namespace AdventCalendar.Controllers
         }
 
         [HttpPost]
-        public ActionResult Ajouter(string name)
+        public ActionResult Ajouter(string name, string email)
         {
             CalendarDAL calendarDAL = new CalendarDAL();
-            string privateName = calendarDAL.Add(name);
-            return Redirect($"{Request.Url.Scheme}://{Request.Url.Authority}/Modifier/{privateName}");
+            Calendar calendar = calendarDAL.Add(name);
+            string directoryName = Path.Combine(Server.MapPath(ConfigurationManager.AppSettings["PicturePath"]), calendar.PublicName);
+            Directory.CreateDirectory(directoryName);
+            string subject = "Calendrier créé";
+            string publicUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{calendar.PublicName}";
+            string privateUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{calendar.PrivateName}";
+            string message = "Bonjour\n\n" +
+                "Bravo, vous avez créé un calendrier.\n" +
+                "Voilà les liens indispensables :\n" +
+                $"public : {publicUrl}\n" +
+                $"privé (uniquement pour vous) : {privateUrl}\n" +
+                "N'oubliez pas d'y ajouter les photos / images\n\n" +
+                $"A bientôt sur {Request.Url.Authority}";
+            Tool.EnvoieMail(email, subject, message);
+            return Redirect($"{Request.Url.Scheme}://{Request.Url.Authority}/Modifier/{calendar.PrivateName}");
         }
 
         [HttpGet]
         public ActionResult Liste()
         {
-            CalendarDAL calendarDAL = new CalendarDAL();
-            calendarDAL.List();
-            return View(calendarDAL.List());
+            return View((Calendar)null);
+        }
+
+        [HttpPost]
+        public ActionResult Liste(string password)
+        {
+            string cryptedGoodPassword = ConfigurationManager.AppSettings["Adminpassword"];
+            string cryptedPassword = password.GetHash();
+            if (cryptedPassword == cryptedGoodPassword)
+            {
+                CalendarDAL calendarDAL = new CalendarDAL();
+                calendarDAL.List();
+                return View(calendarDAL.List());
+            }
+            else
+            {
+                ViewBag.Message = "Mot de passe incorrect";
+                return View((Calendar)null);
+            }
         }
 
         [HttpGet]
@@ -69,10 +99,8 @@ namespace AdventCalendar.Controllers
             // TODO DRY même système que Calendrier Index de area "" 
             CalendarDAL calendarDAL = new CalendarDAL();
             Calendar calendar = calendarDAL.DetailsByPrivateName(name);
-
             BoxDAL boxDAL = new BoxDAL();
             Box box = boxDAL.Details(calendar.BoxId);
-
             string boxPictureFullName = Path.Combine(ConfigurationManager.AppSettings["BoxPicturePath"], box.Path);
             Dictionary<int, string> dictionaryGenericsPicturesNames = new Dictionary<int, string>();
             for (int i = 1; i <= 24; i++)
@@ -80,7 +108,6 @@ namespace AdventCalendar.Controllers
                 dictionaryGenericsPicturesNames.Add(i, Path.Combine(boxPictureFullName, $"{i}.png"));
             }
             Dictionary<int, string> dictionaryPicturesNames = calendarDAL.Dictionary(calendar.Id);
-
             CalendarViewModel calendarViewModel = new CalendarViewModel(calendar, dictionaryPicturesNames, dictionaryGenericsPicturesNames);
             return View(calendarViewModel);
         }
@@ -101,7 +128,6 @@ namespace AdventCalendar.Controllers
                     extension = extension.Substring(0, 5);
                 string fileName = Guid.NewGuid().ToString("n") + extension;
                 string fullFileName = Path.Combine(directoryName, fileName);
-                Directory.CreateDirectory(directoryName);
                 using (FileStream fileStream = new FileStream(fullFileName, FileMode.Create))
                 {
                     file.InputStream.Seek(0, SeekOrigin.Begin);
