@@ -213,6 +213,7 @@
       <DependentUpon>AdventCalendar.edmx</DependentUpon>
       <LastGenOutput>AdventCalendar.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\AdventCalendar.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\AdventCalendar.edmx">

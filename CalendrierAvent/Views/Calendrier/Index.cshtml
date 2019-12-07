@@ -31,7 +31,6 @@
     </div>
 }
 
-
 <div id="popupPicture" class="popup" ontouchstart="TouchStart()" ontouchmove="TouchMove()" ontouchend="TouchEnd()" onmousemove="ShowButtonsCursor()">
     <div id="largeImageAndButtons">
         <img id="imagePopup" class="popup-content">
@@ -77,231 +76,241 @@
     var PreviousBox;
     var NextBox;
     var IsMaxScreen;
+
     var TimeoutHideBoutonsCursor;
-
-    DefaultScreenButton.style.display = 'none';
-
-    function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
-
-        OnMouseOutArea(PreviousButton);
-        OnMouseOutArea(NextButton);
-        ScheduleHideButtonsCursor();
-
-        var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) - 1);
-        var nextPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix","")) + 1);
-        PreviousPicture = document.getElementById(previousPictureId);
-        NextPicture = document.getElementById(nextPictureId);
-
-        var previousBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) - 1);
-        var nextBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix","")) + 1);
-        PreviousBox = document.getElementById(previousBoxId);
-        NextBox = document.getElementById(nextBoxId);
-
-        if (PreviousPicture != null) {
-            PreviousButton.style.display = 'initial';
-            PreviousArea.style.display = 'initial';
-            PreviousArea.onclick = function () {
-                Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-            }
-            PreviousArea.onmouseover = function () {
-                OnMouseInArea(PreviousButton);
-            }
-            PreviousArea.onmousemove = function () {
-                OnMouseInArea(PreviousButton);
-            }
-            PreviousArea.TouchStart = function () {
-                OnMouseInArea(PreviousButton);
-            }
-            PreviousArea.onmouseout = function () {
-                OnMouseOutArea(PreviousButton);
-            }
-            PreviousArea.TouchEnd = function () {
-                OnMouseOutArea(PreviousButton);
-            }
-        }
-        else {
-            PreviousButton.style.display = 'none';
-            PreviousArea.style.display = 'none';
-        }
-
-        if (NextPicture != null) {
-            NextButton.style.display = 'initial';
-            NextArea.style.display = 'initial';
-            NextArea.onclick = function () {
-                Popup_ShowPictures_HideBox(NextPicture, NextBox);
-            }
-            NextArea.onmouseover = function () {
-                OnMouseInArea(NextButton);
-            }
-            NextArea.onmousemove = function () {
-                OnMouseInArea(NextButton);
-            }
-            NextArea.TouchStart = function () {
-                OnMouseInArea(NextButton);
-            }
-            NextArea.onmouseout = function () {
-                OnMouseOutArea(NextButton);
-            }
-            NextArea.TouchEnd = function () {
-                OnMouseOutArea(NextButton);
-            }
-        }
-        else {
-            NextButton.style.display = 'none';
-            NextArea.style.display = 'none';
-        }
-
-        Popup.style.display = 'block';
-        ImagePopup.src = pictureToShowPermanently.src;
-        CaptionText.innerHTML = pictureToShowPermanently.alt;
-        ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
-    }
-
-    function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
-
-        pictureToShowPermanently.style.display = 'initial';
-        boxToHidePermanently.style.display = 'none';
-    }
-
-    function MaxScreen() {
-        CaptionText.style.display = Max_captionText_style_display;
-        LargeImageAndButtons.style.width = Max_largeImageAndButtons_style_width;
-        LargeImageAndButtons.style.height = Max_largeImageAndButtons_style_height;
-        Popup.style.padding = Max_popup_style_padding;
-        Popup.style.width = Max_popup_style_width;
-        Popup.style.height = Max_popup_style_height;
-        MaxScreenButton.style.display = 'none';
-        DefaultScreenButton.style.display = 'initial';
-        IsMaxScreen = true;
-        OpenFullScreen();
-    }
-
-    function DefaultScreen() {
-        CaptionText.style.display = Default_captionText_style_display;
-        LargeImageAndButtons.style.width = Default_largeImageAndButtons_style_width;
-        LargeImageAndButtons.style.height = Default_largeImageAndButtons_style_height;
-        Popup.style.padding = Default_popup_style_padding;
-        Popup.style.width = Default_popup_style_width;
-        Popup.style.height = Default_popup_style_height;
-        DefaultScreenButton.style.display = 'none';
-        MaxScreenButton.style.display = 'initial';
-        IsMaxScreen = false;
-        CloseFullScreen();
-    }
-
-    function OpenFullScreen() {
-        if (LargeImageAndButtons.requestFullscreen) {
-            LargeImageAndButtons.requestFullscreen();
-        } else if (LargeImageAndButtons.mozRequestFullScreen) { /* Firefox */
-            LargeImageAndButtons.mozRequestFullScreen();
-        } else if (LargeImageAndButtons.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-            LargeImageAndButtons.webkitRequestFullscreen();
-        } else if (LargeImageAndButtons.msRequestFullscreen) { /* IE/Edge */
-            LargeImageAndButtons.msRequestFullscreen();
-        }
-    }
-
-    function CloseFullScreen() {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { /* Firefox */
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE/Edge */
-            document.msExitFullscreen();
-        }
-    }
-
     var XBegin;
     var XEnd;
     var XDiff;
 
-    function TouchStart() {
-        XBegin = event.touches[0].clientX;
-        XDiff = 0;
-    }
+    DefaultScreenButton.style.display = 'none';
+    window.addEventListener("keydown", function(){KeyDown(event)});
 
-    function TouchMove() {
-        XEnd = event.touches[0].clientX;
-        XDiff = XEnd - XBegin;
-        if (XDiff > 0 && PreviousPicture != null) {
-            ImagePopup.style.transform = 'translate('+XDiff+'px)';
-        }
-        else if (XDiff < 0 && NextPicture != null) {
-            ImagePopup.style.transform = 'translate('+XDiff+'px)';
-        }
-    }
 
-    function TouchEnd() {
-        if (XDiff > 40 && PreviousPicture != null) {
-            ImagePopup.style.display = 'none';
+
+function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
+
+    OnMouseOutArea(PreviousButton);
+    OnMouseOutArea(NextButton);
+    ScheduleHideButtonsCursor();
+
+    var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) - 1);
+    var nextPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) + 1);
+    PreviousPicture = document.getElementById(previousPictureId);
+    NextPicture = document.getElementById(nextPictureId);
+
+    var previousBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix", "")) - 1);
+    var nextBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix", "")) + 1);
+    PreviousBox = document.getElementById(previousBoxId);
+    NextBox = document.getElementById(nextBoxId);
+
+    if (PreviousPicture != null) {
+        PreviousButton.style.display = 'initial';
+        PreviousArea.style.display = 'initial';
+        PreviousArea.onclick = function () {
             Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-            ImagePopup.style.display = 'initial';
-            ImagePopup.style.transform = 'translate('+XDiff+'px)';
         }
-        else if (XDiff < -40 && NextPicture != null) {
-            ImagePopup.style.display = 'none';
-            Popup_ShowPictures_HideBox(NextPicture, NextBox);
-            ImagePopup.style.display = 'initial';
-            ImagePopup.style.transform = 'translate('+XDiff+'px)';
+        PreviousArea.onmouseover = function () {
+            OnMouseInArea(PreviousButton);
         }
-        ImagePopup.style.transform = 'translate(0px)';
-    }
-
-    function KeyDown() {
-        if (window.event.keyCode == 37 && PreviousPicture != null) {
-            Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-            HideButtonsCursor();
+        PreviousArea.onmousemove = function () {
+            OnMouseInArea(PreviousButton);
         }
-        if (window.event.keyCode == 39 && NextPicture != null) {
-            Popup_ShowPictures_HideBox(NextPicture, NextBox);
-            HideButtonsCursor();
+        PreviousArea.TouchStart = function () {
+            OnMouseInArea(PreviousButton);
+        }
+        PreviousArea.onmouseout = function () {
+            OnMouseOutArea(PreviousButton);
+        }
+        PreviousArea.TouchEnd = function () {
+            OnMouseOutArea(PreviousButton);
         }
     }
-
-    function OnMouseInArea(element) {
-        element.style.cursor = 'pointer';
-        element.style.backgroundColor = '#808080';
-    }
-
-    function OnMouseOutArea(element) {
-        element.style.cursor = 'initial';
-        element.style.backgroundColor = 'initial';
-    }
-
-    function HideButtonsCursor() {
+    else {
         PreviousButton.style.display = 'none';
+        PreviousArea.style.display = 'none';
+    }
+
+    if (NextPicture != null) {
+        NextButton.style.display = 'initial';
+        NextArea.style.display = 'initial';
+        NextArea.onclick = function () {
+            Popup_ShowPictures_HideBox(NextPicture, NextBox);
+        }
+        NextArea.onmouseover = function () {
+            OnMouseInArea(NextButton);
+        }
+        NextArea.onmousemove = function () {
+            OnMouseInArea(NextButton);
+        }
+        NextArea.TouchStart = function () {
+            OnMouseInArea(NextButton);
+        }
+        NextArea.onmouseout = function () {
+            OnMouseOutArea(NextButton);
+        }
+        NextArea.TouchEnd = function () {
+            OnMouseOutArea(NextButton);
+        }
+    }
+    else {
         NextButton.style.display = 'none';
-        CloseButton.style.display = 'none';
-        MaxScreenButton.style.display = 'none';
-        DefaultScreenButton.style.display = 'none';
-        Popup.style.cursor = 'none';
-        PreviousArea.style.cursor = 'none';
-        NextArea.style.cursor = 'none';
+        NextArea.style.display = 'none';
     }
 
-    function ShowButtonsCursor() {
-        Popup.style.cursor = 'initial';
-        PreviousArea.style.cursor = 'pointer';
-        NextArea.style.cursor = 'pointer';
-        CloseButton.style.display = 'initial';
-        if (PreviousPicture != null)
-            PreviousButton.style.display = 'initial';
-        if (NextPicture != null)
-            NextButton.style.display = 'initial';
+    Popup.style.display = 'block';
+    ImagePopup.src = pictureToShowPermanently.src;
+    CaptionText.innerHTML = pictureToShowPermanently.alt;
+    ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
+}
+
+function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
+
+    pictureToShowPermanently.style.display = 'initial';
+    boxToHidePermanently.style.display = 'none';
+}
+
+function MaxScreen() {
+    CaptionText.style.display = Max_captionText_style_display;
+    LargeImageAndButtons.style.width = Max_largeImageAndButtons_style_width;
+    LargeImageAndButtons.style.height = Max_largeImageAndButtons_style_height;
+    Popup.style.padding = Max_popup_style_padding;
+    Popup.style.width = Max_popup_style_width;
+    Popup.style.height = Max_popup_style_height;
+    MaxScreenButton.style.display = 'none';
+    DefaultScreenButton.style.display = 'initial';
+    IsMaxScreen = true;
+    OpenFullScreen();
+}
+
+function DefaultScreen() {
+    CaptionText.style.display = Default_captionText_style_display;
+    LargeImageAndButtons.style.width = Default_largeImageAndButtons_style_width;
+    LargeImageAndButtons.style.height = Default_largeImageAndButtons_style_height;
+    Popup.style.padding = Default_popup_style_padding;
+    Popup.style.width = Default_popup_style_width;
+    Popup.style.height = Default_popup_style_height;
+    DefaultScreenButton.style.display = 'none';
+    MaxScreenButton.style.display = 'initial';
+    IsMaxScreen = false;
+    CloseFullScreen();
+}
+
+function OpenFullScreen() {
+    if (LargeImageAndButtons.requestFullscreen) {
+        LargeImageAndButtons.requestFullscreen();
+    } else if (LargeImageAndButtons.mozRequestFullScreen) { /* Firefox */
+        LargeImageAndButtons.mozRequestFullScreen();
+    } else if (LargeImageAndButtons.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        LargeImageAndButtons.webkitRequestFullscreen();
+    } else if (LargeImageAndButtons.msRequestFullscreen) { /* IE/Edge */
+        LargeImageAndButtons.msRequestFullscreen();
+    }
+}
+
+function CloseFullScreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+    }
+}
+
+function TouchStart() {
+    XBegin = event.touches[0].clientX;
+    XDiff = 0;
+}
+
+function TouchMove() {
+    XEnd = event.touches[0].clientX;
+    XDiff = XEnd - XBegin;
+    if (XDiff > 0 && PreviousPicture != null) {
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+    else if (XDiff < 0 && NextPicture != null) {
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+}
+
+function TouchEnd() {
+    if (XDiff > 40 && PreviousPicture != null) {
+        ImagePopup.style.display = 'none';
+        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+        ImagePopup.style.display = 'initial';
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+    else if (XDiff < -40 && NextPicture != null) {
+        ImagePopup.style.display = 'none';
+        Popup_ShowPictures_HideBox(NextPicture, NextBox);
+        ImagePopup.style.display = 'initial';
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+    ImagePopup.style.transform = 'translate(0px)';
+}
+
+function KeyDown(event) {
+    if (event.keyCode == 37 && PreviousPicture != null) {
+        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+        HideButtonsCursor();
+    }
+    if (event.keyCode == 39 && NextPicture != null) {
+        Popup_ShowPictures_HideBox(NextPicture, NextBox);
+        HideButtonsCursor();
+    }
+    if (event.code == "F11") {
         if (IsMaxScreen)
-            DefaultScreenButton.style.display = 'initial';
+            DefaultScreen();
         else
-            MaxScreenButton.style.display = 'initial';
-        ScheduleHideButtonsCursor();
+            MaxScreen();
     }
+}
 
-    function ScheduleHideButtonsCursor() {
-        clearTimeout(TimeoutHideBoutonsCursor);
-        TimeoutHideBoutonsCursor = setTimeout(function () {
-            HideButtonsCursor();
-        }, 800);
-    }
+function OnMouseInArea(element) {
+    element.style.cursor = 'pointer';
+    element.style.backgroundColor = '#808080';
+}
+
+function OnMouseOutArea(element) {
+    element.style.cursor = 'initial';
+    element.style.backgroundColor = 'initial';
+}
+
+function HideButtonsCursor() {
+    PreviousButton.style.display = 'none';
+    NextButton.style.display = 'none';
+    CloseButton.style.display = 'none';
+    MaxScreenButton.style.display = 'none';
+    DefaultScreenButton.style.display = 'none';
+    Popup.style.cursor = 'none';
+    PreviousArea.style.cursor = 'none';
+    NextArea.style.cursor = 'none';
+}
+
+function ShowButtonsCursor() {
+    Popup.style.cursor = 'initial';
+    PreviousArea.style.cursor = 'pointer';
+    NextArea.style.cursor = 'pointer';
+    CloseButton.style.display = 'initial';
+    if (PreviousPicture != null)
+        PreviousButton.style.display = 'initial';
+    if (NextPicture != null)
+        NextButton.style.display = 'initial';
+    if (IsMaxScreen)
+        DefaultScreenButton.style.display = 'initial';
+    else
+        MaxScreenButton.style.display = 'initial';
+    ScheduleHideButtonsCursor();
+}
+
+function ScheduleHideButtonsCursor() {
+    clearTimeout(TimeoutHideBoutonsCursor);
+    TimeoutHideBoutonsCursor = setTimeout(function () {
+        HideButtonsCursor();
+    }, 800);
+}
+
 
 </script>
