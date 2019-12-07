@@ -219,10 +219,12 @@ function CloseFullScreen() {
     }
 }
 
-function TouchStart() {
-    XBegin = event.touches[0].clientX;
-    XDiff = 0;
-}
+    function TouchStart() {
+        PreviousButton.style.display = 'initial';
+        NextButton.style.display = 'initial';
+        XBegin = event.touches[0].clientX;
+        XDiff = 0;
+    }
 
 function TouchMove() {
     XEnd = event.touches[0].clientX;
