@@ -33,7 +33,9 @@
 
 <div id="popupPicture" class="popup" ontouchstart="TouchStart()" ontouchmove="TouchMove()" ontouchend="TouchEnd()" onmousemove="ShowButtonsCursor()">
     <div id="largeImageAndButtons">
+        <img id="previousImagePopup">
         <img id="imagePopup" class="popup-content">
+        <img id="nextImagePopup">
         <div id="caption"></div>
         <div id="previousButton" class="previous"></div>
         <div id="nextButton" class="next"></div>
@@ -49,6 +51,8 @@
     var LargeImageAndButtons = document.getElementById("largeImageAndButtons");
     var Popup = document.getElementById("popupPicture");
     var ImagePopup = document.getElementById("imagePopup");
+    var PreviousImagePopup = document.getElementById("previousImagePopup");
+    var NextImagePopup = document.getElementById("nextImagePopup");
     var CaptionText = document.getElementById("caption");
     var MaxScreenButton = document.getElementById("maxScreenButton");
     var DefaultScreenButton = document.getElementById("defaultScreenButton");
@@ -158,7 +162,11 @@ function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanent
     }
 
     Popup.style.display = 'block';
+    PreviousImagePopup.src = PreviousPicture != null ? PreviousPicture.src : null;
+    PreviousImagePopup.style.display = 'none';
     ImagePopup.src = pictureToShowPermanently.src;
+    NextImagePopup.src = NextPicture != null ? NextPicture.src : null;
+    NextImagePopup.style.display = 'none';
     CaptionText.innerHTML = pictureToShowPermanently.alt;
     ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
 }
@@ -231,9 +239,23 @@ function TouchMove() {
     XDiff = XEnd - XBegin;
     if (XDiff > 0 && PreviousPicture != null) {
         ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+        NextImagePopup.style.display = 'none';
+        PreviousImagePopup.style.display = 'initial';
+        PreviousImagePopup.style.position = 'fixed';
+        PreviousImagePopup.style.height = ImagePopup.height + 'px'; // todo refaire meilleur calcul
+        PreviousImagePopup.style.left = '-' + PreviousImagePopup.width + 'px';
+        PreviousImagePopup.style.top = '50%';
+        PreviousImagePopup.style.transform = 'translate(' + XDiff + 'px, -50%)';
     }
     else if (XDiff < 0 && NextPicture != null) {
         ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+        PreviousImagePopup.style.display = 'none';
+        NextImagePopup.style.display = 'initial';
+        NextImagePopup.style.position = 'fixed';
+        NextImagePopup.style.height = ImagePopup.height + 'px'; // todo refaire meilleur calcul
+        NextImagePopup.style.right = '-'+ NextImagePopup.width +'px';
+        NextImagePopup.style.top = '50%';
+        NextImagePopup.style.transform = 'translate(' + XDiff + 'px, -50%)';
     }
 }
 

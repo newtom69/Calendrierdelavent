@@ -84,11 +84,11 @@
 #caption {
     position: fixed;
     bottom: 3.5%;
+    transform: translateY(50%);
     left: 50%;
     transform: translateX(-50%);
     color: #ccc;
     font-size: larger;
-    transform: translateY(50%);
 }
 
 .popup-content {
