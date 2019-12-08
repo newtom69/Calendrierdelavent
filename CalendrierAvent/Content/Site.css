@@ -32,21 +32,6 @@
         object-fit: contain;
     }
 
-        .BoxAndPicture img.box {
-        }
-
-    .BoxAndPicture:hover img.box {
-        display: none;
-    }
-
-    .BoxAndPicture img.hover {
-        display: none;
-    }
-
-    .BoxAndPicture:hover img.hover {
-        display: block;
-    }
-
 .popup {
     display: none;
     position: fixed;
@@ -151,6 +136,7 @@
 }
 
 #defaultScreenButton {
+    display: none;
     background-image: url(/Content/Icones/White/DefaultScreen.svg);
 }
 
@@ -214,9 +200,9 @@
     /*animation-duration: 0.5s;*/
 }
 
-    #previousArea:hover, #previousArea:focus, #nextArea:hover, #nextArea:focus {
-        cursor: pointer;
-    }
+#previousArea:hover, #previousArea:focus, #nextArea:hover, #nextArea:focus {
+    cursor: pointer;
+}
 
 .close:hover, .close:focus, #nextButton:hover, #nextButton:focus, #maxScreenButton:hover, #maxScreenButton:focus, #defaultScreenButton:hover, #defaultScreenButton:focus {
     cursor: pointer;
