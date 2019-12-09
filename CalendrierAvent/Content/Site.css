@@ -155,6 +155,12 @@
     background-position: center;
 }
 
+    #previousButton.hover, #nextButton.hover {
+        cursor: pointer;
+        background-color: #808080;
+    }
+
+
 #previousArea {
     position: absolute;
     z-index: 4;
@@ -204,9 +210,9 @@
     cursor: pointer;
 }
 
-.close:hover, .close:focus, #nextButton:hover, #nextButton:focus, #maxScreenButton:hover, #maxScreenButton:focus, #defaultScreenButton:hover, #defaultScreenButton:focus {
+.close:hover, .close:focus, #maxScreenButton:hover, #maxScreenButton:focus, #defaultScreenButton:hover, #defaultScreenButton:focus {
     cursor: pointer;
-    background-color: #808080
+    background-color: #808080;
 }
 
 @media only screen and (max-width: 700px) {
