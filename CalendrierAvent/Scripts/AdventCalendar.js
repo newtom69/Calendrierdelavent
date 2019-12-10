@@ -1,5 +1,10 @@
 ﻿$(document).ready(function () {
     $('.picture').hide();
+    $('.boxReplacingPicture').hide();
+    
+    $('.picture').click(function () {
+        ScheduleHideButtonsCursor();
+    });
 
     $('#closeButton').click(function () {
         DefaultScreen();
@@ -42,6 +47,22 @@
         }
     });
 
+    document.getElementById('nextArea').addEventListener("touchstart", function () {
+        OnMouseInArea(document.getElementById("nextButton"));
+    });
+
+    document.getElementById('nextArea').addEventListener("touchend", function () {
+        OnMouseOutArea(document.getElementById("nextButton"));
+    });
+
+    document.getElementById('previousArea').addEventListener("touchstart", function () {
+        OnMouseInArea(document.getElementById("previousButton"));
+    });
+
+    document.getElementById('previousArea').addEventListener("touchend", function () {
+        OnMouseOutArea(document.getElementById("previousButton"));
+    });
+
     //$('#previousArea').onmousemove = function () {
     //    OnMouseInArea(PreviousButton);
     //}
@@ -54,13 +75,6 @@
 
 });
 
-var Popup = document.getElementById("popupPicture");
-var ImagePopup = document.getElementById("imagePopup");
-var CloseButton = document.getElementById("closeButton");
-var PreviousArea = document.getElementById("previousArea");
-var NextArea = document.getElementById("nextArea");
-var PreviousButton = document.getElementById("previousButton");
-var NextButton = document.getElementById("nextButton");
 var PreviousPicture;
 var NextPicture;
 var PreviousBox;
@@ -71,6 +85,79 @@ var XBegin;
 var XEnd;
 var XDiff;
 
+function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
+
+    $('#popupPicture').show();
+    $('#imagePopup').attr('src', pictureToShow.src);
+    $('#caption').html(pictureToShow.alt)
+
+    var previousPictureId = "pict" + (parseInt(pictureToShow.id.replace("pict", "")) - 1);
+    var nextPictureId = "pict" + (parseInt(pictureToShow.id.replace("pict", "")) + 1);
+    var previousBoxId = "box" + (parseInt(boxToHide.id.replace("box", "")) - 1);
+    var nextBoxId = "box" + (parseInt(boxToHide.id.replace("box", "")) + 1);
+    //TODO : trouver le nombre dans la string et prendre -1 et +1 pour previous et next
+
+    PreviousPicture = document.getElementById(previousPictureId);
+    NextPicture = document.getElementById(nextPictureId);
+    PreviousBox = document.getElementById(previousBoxId);
+    NextBox = document.getElementById(nextBoxId);
+
+    if (PreviousPicture != null) {
+        $('#previousButton').show();
+        $('#previoustArea').show();
+    }
+    else {
+        $('#previousButton').hide();
+        $('#previousArea').hide();
+    }
+
+    if (NextPicture != null) {
+        $('#nextButton').show();
+        $('#nextArea').show();
+    }
+    else {
+        $('#nextButton').hide();
+        $('#nextArea').hide();
+    }
+
+
+    ShowPicture_HideBox(pictureToShow, boxToHide);
+}
+
+
+function TouchMove() {
+    XEnd = event.touches[0].clientX;
+    XDiff = XEnd - XBegin;
+    if (XDiff > 0 && PreviousPicture != null) {
+        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+    }
+    else if (XDiff < 0 && NextPicture != null) {
+        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+    }
+}
+
+function TouchEnd() {
+    if (XDiff > 40 && PreviousPicture != null) {
+        $('#imagePopup').hide();
+        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+        $('#imagePopup').show();
+        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+    }
+    else if (XDiff < -40 && NextPicture != null) {
+        $('#imagePopup').hide();
+        Popup_ShowPictures_HideBox(NextPicture, NextBox);
+        $('#imagePopup').show();
+        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+    }
+    document.getElementById("imagePopup").style.transform = 'translate(0px)';
+}
+
+function TouchStart() {
+    $('#previousButton').show();
+    $('#nextButton').show();
+    XBegin = event.touches[0].clientX;
+    XDiff = 0;
+}
 
 function HideButtonsCursor() {
     $('#previousButton').hide();
@@ -105,7 +192,6 @@ function ScheduleHideButtonsCursor() {
         HideButtonsCursor();
     }, 800);
 }
-
 
 function DefaultScreen() {
     $('#caption').show();
