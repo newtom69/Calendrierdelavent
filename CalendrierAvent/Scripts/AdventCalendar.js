@@ -91,11 +91,10 @@ function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
     $('#imagePopup').attr('src', pictureToShow.src);
     $('#caption').html(pictureToShow.alt)
 
-    var previousPictureId = "pict" + (parseInt(pictureToShow.id.replace("pict", "")) - 1);
-    var nextPictureId = "pict" + (parseInt(pictureToShow.id.replace("pict", "")) + 1);
-    var previousBoxId = "box" + (parseInt(boxToHide.id.replace("box", "")) - 1);
-    var nextBoxId = "box" + (parseInt(boxToHide.id.replace("box", "")) + 1);
-    //TODO : trouver le nombre dans la string et prendre -1 et +1 pour previous et next
+    var previousPictureId = getPreviousId(pictureToShow.id)
+    var nextPictureId = getNextId(pictureToShow.id)
+    var previousBoxId = getPreviousId(boxToHide.id)
+    var nextBoxId = getNextId(boxToHide.id)
 
     PreviousPicture = document.getElementById(previousPictureId);
     NextPicture = document.getElementById(nextPictureId);
@@ -175,10 +174,22 @@ function ShowButtonsCursor() {
     $('#nextArea').css('cursor', 'pointer');
     $('#popupPicture').css('cursor', 'default');
     $('#closeButton').show();
-    if (PreviousPicture != null)
+    if (PreviousPicture != null) {
+        $("#previousArea").hover(function () {
+            $('#previousButton').addClass("hover");
+        }, function () {
+            $('#previousButton').removeClass("hover");
+        });
         $('#previousButton').show();
-    if (NextPicture != null)
+    }
+    if (NextPicture != null) {
+        $("#nextArea").hover(function () {
+            $('#nextButton').addClass("hover");
+        }, function () {
+            $('#nextButton').removeClass("hover");
+        });
         $('#nextButton').show();
+    }
     if (IsMaxScreen)
         $('#defaultScreenButton').show();
     else
@@ -266,14 +277,18 @@ function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
     $(boxToHidePermanently).hide();
 }
 
-function HideButtonsCursor() {
-    $('#previousButton').hide();
-    $('#nextButton').hide();
-    $('#closeButton').hide();
-    $('#maxScreenButton').hide();
-    $('#defaultScreenButton').hide();
-    $('#popupPicture').css('cursor', 'none');
-    $('#previousArea').hide();
-    $('#nextArea').hide();
+function getPreviousId(string) {
+    var indexDigit = string.search(/\d/);
+    var prefix = string.substring(0, indexDigit);
+    var sufix = string.substring(indexDigit, string.length);
+    var previousDigit = parseInt(sufix, 10) - 1;
+    return prefix + previousDigit;
 }
 
+function getNextId(string) {
+    var indexDigit = string.search(/\d/);
+    var prefix = string.substring(0, indexDigit);
+    var sufix = string.substring(indexDigit, string.length);
+    var nextDigit = parseInt(sufix, 10) + 1;
+    return prefix + nextDigit;
+}
