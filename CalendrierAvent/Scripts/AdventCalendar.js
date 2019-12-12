@@ -103,7 +103,7 @@ function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
 
     if (PreviousPicture != null) {
         $('#previousButton').show();
-        $('#previoustArea').show();
+        $('#previousArea').show();
     }
     else {
         $('#previousButton').hide();
@@ -201,7 +201,7 @@ function ScheduleHideButtonsCursor() {
     clearTimeout(TimeoutHideBoutonsCursor);
     TimeoutHideBoutonsCursor = setTimeout(function () {
         HideButtonsCursor();
-    }, 800);
+    }, 1000);
 }
 
 function DefaultScreen() {
