@@ -131,36 +131,16 @@
     <Compile Include="Controllers\CalendrierController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\ParentController.cs" />
     <Compile Include="DAL\BoxDAL.cs" />
     <Compile Include="DAL\CalendarDAL.cs" />
     <Compile Include="DAL\PictureDAL.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AdventCalendar.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventCalendar.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AdventCalendar.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventCalendar.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AdventCalendar.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventCalendar.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Box.cs">
-      <DependentUpon>AdventCalendar.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Calendar.cs">
-      <DependentUpon>AdventCalendar.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Picture.cs">
-      <DependentUpon>AdventCalendar.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Box.cs" />
+    <Compile Include="Models\Calendar.cs" />
+    <Compile Include="Models\Picture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\Tool.cs" />
     <Compile Include="ViewModels\CalendarViewModel.cs" />
@@ -203,26 +183,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\AdventCalendar.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AdventCalendar.edmx</DependentUpon>
-      <LastGenOutput>AdventCalendar.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\AdventCalendar.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AdventCalendar.edmx</DependentUpon>
-      <LastGenOutput>AdventCalendar.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\AdventCalendar.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\AdventCalendar.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AdventCalendar.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\AdventCalendar.edmx.diagram">
-      <DependentUpon>AdventCalendar.edmx</DependentUpon>
-    </Content>
     <Content Include="Views\Calendrier\Ajouter.cshtml" />
     <Content Include="Views\Calendrier\Liste.cshtml" />
     <Content Include="Views\Calendrier\Modifier.cshtml" />
@@ -254,6 +217,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Photos\" />
+    <Folder Include="Views\Parent\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -270,6 +234,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LMN\omnilog\OmniFW\OmniFW\OmniFW.csproj">
+      <Project>{CE49EF00-B904-4A7D-B465-8C16515F7E5C}</Project>
+      <Name>OmniFW</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -2,7 +2,7 @@
 
 namespace AdventCalendar.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ParentController
     {
         public ActionResult Index()
         {

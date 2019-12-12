@@ -17,10 +17,10 @@
             string currentBox = BoxPreffix + i;
             string currentPicture = PicturePreffix + i;
             <div class="BoxAndPicture">
-                <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
+                <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" onmouseover="ShowPicture_HideBox(@currentPicture, @currentBox);" />
                 @if (Model.PicturesNames.ContainsKey(i))
                 {
-                    <img id="@currentPicture" class="hover" src="@Model.PicturesNames[i]" alt="@(i)" onclick="Popup_ShowPictures_HideBox(this, @currentBox);" onmouseover="ShowPicture_HideBox(this, @currentBox);" />
+                    <img id="@currentPicture" class="picture" src="@Model.PicturesNames[i]" alt="@(i)" onclick="Popup_ShowPictures_HideBox(this, @currentBox);" />
                 }
                 else
                 {
@@ -35,62 +35,20 @@
     <div id="largeImageAndButtons">
         <img id="imagePopup" class="popup-content">
         <div id="caption"></div>
-        <div id="previousButton" class="previous"></div>
-        <div id="nextButton" class="next"></div>
+        <div id="previousButton"></div>
+        <div id="nextButton"></div>
         <div id="previousArea"></div>
         <div id="nextArea"></div>
-        <div id="closeButton" class="close" onclick="DefaultScreen(); Popup.style.display = 'none';"></div>
-        <div id="maxScreenButton" class="screenButton" onclick="MaxScreen();"></div>
-        <div id="defaultScreenButton" class="screenButton" onclick="DefaultScreen();"></div>
+        <div id="closeButton" class="close"></div>
+        <div id="maxScreenButton" class="screenButton"></div>
+        <div id="defaultScreenButton" class="screenButton"></div>
     </div>
 </div>
 
 <script>
-    var LargeImageAndButtons = document.getElementById("largeImageAndButtons");
-    var Popup = document.getElementById("popupPicture");
-    var ImagePopup = document.getElementById("imagePopup");
-    var CaptionText = document.getElementById("caption");
-    var MaxScreenButton = document.getElementById("maxScreenButton");
-    var DefaultScreenButton = document.getElementById("defaultScreenButton");
-    var CloseButton = document.getElementById("closeButton");
-    var PreviousArea = document.getElementById("previousArea");
-    var NextArea = document.getElementById("nextArea");
-    var PreviousButton = document.getElementById("previousButton");
-    var NextButton = document.getElementById("nextButton");
-
-    var Default_captionText_style_display = CaptionText.style.display;
-    var Default_largeImageAndButtons_style_width = LargeImageAndButtons.style.width;
-    var Default_largeImageAndButtons_style_height = LargeImageAndButtons.style.height;
-    var Default_popup_style_padding = Popup.style.padding;
-    var Default_popup_style_width = Popup.style.width;
-    var Default_popup_style_height = Popup.style.height;
-
-    var Max_captionText_style_display = 'none';
-    var Max_largeImageAndButtons_style_width = '100%';
-    var Max_largeImageAndButtons_style_height = '100%';
-    var Max_popup_style_padding = '0px';
-    var Max_popup_style_width = '100%';
-    var Max_popup_style_height = '100%';
-    var PreviousPicture;
-    var NextPicture;
-    var PreviousBox;
-    var NextBox;
-    var IsMaxScreen;
-
-    var TimeoutHideBoutonsCursor;
-    var XBegin;
-    var XEnd;
-    var XDiff;
-
-    DefaultScreenButton.style.display = 'none';
-    window.addEventListener("keydown", function(){KeyDown(event)});
-
-
 
 function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
 
-    OnMouseOutArea(PreviousButton);
-    OnMouseOutArea(NextButton);
     ScheduleHideButtonsCursor();
 
     var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) - 1);
@@ -104,124 +62,44 @@ function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanent
     NextBox = document.getElementById(nextBoxId);
 
     if (PreviousPicture != null) {
-        PreviousButton.style.display = 'initial';
-        PreviousArea.style.display = 'initial';
-        PreviousArea.onclick = function () {
-            Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-        }
-        PreviousArea.onmouseover = function () {
+        $('#previousButton').show();
+        $('#previoustArea').show();
+        $('#previousArea').TouchStart = function () {
             OnMouseInArea(PreviousButton);
         }
-        PreviousArea.onmousemove = function () {
-            OnMouseInArea(PreviousButton);
-        }
-        PreviousArea.TouchStart = function () {
-            OnMouseInArea(PreviousButton);
-        }
-        PreviousArea.onmouseout = function () {
-            OnMouseOutArea(PreviousButton);
-        }
-        PreviousArea.TouchEnd = function () {
+        $('#previousArea').TouchEnd = function () {
             OnMouseOutArea(PreviousButton);
         }
     }
     else {
-        PreviousButton.style.display = 'none';
-        PreviousArea.style.display = 'none';
+        $('#previousButton').hide();
+        $('#previousArea').hide();
     }
 
     if (NextPicture != null) {
-        NextButton.style.display = 'initial';
-        NextArea.style.display = 'initial';
-        NextArea.onclick = function () {
-            Popup_ShowPictures_HideBox(NextPicture, NextBox);
-        }
-        NextArea.onmouseover = function () {
-            OnMouseInArea(NextButton);
-        }
-        NextArea.onmousemove = function () {
-            OnMouseInArea(NextButton);
-        }
+        $('#nextButton').show();
+        $('#nextArea').show();
         NextArea.TouchStart = function () {
             OnMouseInArea(NextButton);
-        }
-        NextArea.onmouseout = function () {
-            OnMouseOutArea(NextButton);
         }
         NextArea.TouchEnd = function () {
             OnMouseOutArea(NextButton);
         }
     }
     else {
-        NextButton.style.display = 'none';
-        NextArea.style.display = 'none';
+        $('#nextButton').hide();
+        $('#nextArea').hide();
     }
+    $('#popupPicture').show();
 
-    Popup.style.display = 'block';
     ImagePopup.src = pictureToShowPermanently.src;
-    CaptionText.innerHTML = pictureToShowPermanently.alt;
+    $('#caption').html(pictureToShowPermanently.alt)
     ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
 }
 
-function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
-
-    pictureToShowPermanently.style.display = 'initial';
-    boxToHidePermanently.style.display = 'none';
-}
-
-function MaxScreen() {
-    CaptionText.style.display = Max_captionText_style_display;
-    LargeImageAndButtons.style.width = Max_largeImageAndButtons_style_width;
-    LargeImageAndButtons.style.height = Max_largeImageAndButtons_style_height;
-    Popup.style.padding = Max_popup_style_padding;
-    Popup.style.width = Max_popup_style_width;
-    Popup.style.height = Max_popup_style_height;
-    MaxScreenButton.style.display = 'none';
-    DefaultScreenButton.style.display = 'initial';
-    IsMaxScreen = true;
-    OpenFullScreen();
-}
-
-function DefaultScreen() {
-    CaptionText.style.display = Default_captionText_style_display;
-    LargeImageAndButtons.style.width = Default_largeImageAndButtons_style_width;
-    LargeImageAndButtons.style.height = Default_largeImageAndButtons_style_height;
-    Popup.style.padding = Default_popup_style_padding;
-    Popup.style.width = Default_popup_style_width;
-    Popup.style.height = Default_popup_style_height;
-    DefaultScreenButton.style.display = 'none';
-    MaxScreenButton.style.display = 'initial';
-    IsMaxScreen = false;
-    CloseFullScreen();
-}
-
-function OpenFullScreen() {
-    if (LargeImageAndButtons.requestFullscreen) {
-        LargeImageAndButtons.requestFullscreen();
-    } else if (LargeImageAndButtons.mozRequestFullScreen) { /* Firefox */
-        LargeImageAndButtons.mozRequestFullScreen();
-    } else if (LargeImageAndButtons.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-        LargeImageAndButtons.webkitRequestFullscreen();
-    } else if (LargeImageAndButtons.msRequestFullscreen) { /* IE/Edge */
-        LargeImageAndButtons.msRequestFullscreen();
-    }
-}
-
-function CloseFullScreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { /* Firefox */
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE/Edge */
-        document.msExitFullscreen();
-    }
-}
-
     function TouchStart() {
-        PreviousButton.style.display = 'initial';
-        NextButton.style.display = 'initial';
+        $('#previousButton').show();
+        $('#nextButton').show();
         XBegin = event.touches[0].clientX;
         XDiff = 0;
     }
@@ -239,80 +117,23 @@ function TouchMove() {
 
 function TouchEnd() {
     if (XDiff > 40 && PreviousPicture != null) {
-        ImagePopup.style.display = 'none';
+        $('#imagePopup').hide();
         Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-        ImagePopup.style.display = 'initial';
+        $('#imagePopup').show();
         ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
     }
     else if (XDiff < -40 && NextPicture != null) {
-        ImagePopup.style.display = 'none';
+        $('#imagePopup').hide();
         Popup_ShowPictures_HideBox(NextPicture, NextBox);
-        ImagePopup.style.display = 'initial';
+        $('#imagePopup').show();
         ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
     }
     ImagePopup.style.transform = 'translate(0px)';
 }
 
-function KeyDown(event) {
-    if (event.keyCode == 37 && PreviousPicture != null) {
-        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-        HideButtonsCursor();
-    }
-    if (event.keyCode == 39 && NextPicture != null) {
-        Popup_ShowPictures_HideBox(NextPicture, NextBox);
-        HideButtonsCursor();
-    }
-    if (event.code == "F11") {
-        if (IsMaxScreen)
-            DefaultScreen();
-        else
-            MaxScreen();
-    }
-}
 
-function OnMouseInArea(element) {
-    element.style.cursor = 'pointer';
-    element.style.backgroundColor = '#808080';
-}
 
-function OnMouseOutArea(element) {
-    element.style.cursor = 'initial';
-    element.style.backgroundColor = 'initial';
-}
 
-function HideButtonsCursor() {
-    PreviousButton.style.display = 'none';
-    NextButton.style.display = 'none';
-    CloseButton.style.display = 'none';
-    MaxScreenButton.style.display = 'none';
-    DefaultScreenButton.style.display = 'none';
-    Popup.style.cursor = 'none';
-    PreviousArea.style.cursor = 'none';
-    NextArea.style.cursor = 'none';
-}
-
-function ShowButtonsCursor() {
-    Popup.style.cursor = 'initial';
-    PreviousArea.style.cursor = 'pointer';
-    NextArea.style.cursor = 'pointer';
-    CloseButton.style.display = 'initial';
-    if (PreviousPicture != null)
-        PreviousButton.style.display = 'initial';
-    if (NextPicture != null)
-        NextButton.style.display = 'initial';
-    if (IsMaxScreen)
-        DefaultScreenButton.style.display = 'initial';
-    else
-        MaxScreenButton.style.display = 'initial';
-    ScheduleHideButtonsCursor();
-}
-
-function ScheduleHideButtonsCursor() {
-    clearTimeout(TimeoutHideBoutonsCursor);
-    TimeoutHideBoutonsCursor = setTimeout(function () {
-        HideButtonsCursor();
-    }, 800);
-}
 
 
 </script>

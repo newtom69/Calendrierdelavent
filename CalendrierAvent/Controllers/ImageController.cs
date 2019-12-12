@@ -2,7 +2,7 @@
 
 namespace AdventCalendar.Controllers
 {
-    public class ImageController : Controller
+    public class ImageController : ParentController
     {
         // GET: Picture
         public ActionResult Index()

@@ -11,17 +11,17 @@ using System.Web.Mvc;
 
 namespace AdventCalendar.Controllers
 {
-    public class CalendrierController : Controller
+    public class CalendrierController : ParentController
     {
         [HttpGet]
         public ActionResult Index(string name)
         {
             CalendarDAL calendarDAL = new CalendarDAL();
             Calendar calendar = calendarDAL.DetailsByPublicName(name);
-            if (calendar == null)
+            if (calendar.Id == -1)
             {
                 // if calendar witch PublicName don't exist, test with PrivateName and redirect to admin 
-                if (calendarDAL.DetailsByPrivateName(name) != null)
+                if (calendarDAL.DetailsByPrivateName(name).Id != -1)
                     return Redirect($"{Request.Url.Scheme}://{Request.Url.Authority}/Modifier/{name}");
                 else
                     return RedirectToAction("Ajouter");
@@ -29,7 +29,6 @@ namespace AdventCalendar.Controllers
 
             BoxDAL boxDAL = new BoxDAL();
             Box box = boxDAL.Details(calendar.BoxId);
-
             string boxPictureFullName = Path.Combine(ConfigurationManager.AppSettings["BoxPicturePath"], box.Path);
             Dictionary<int, string> dictionaryGenericsPicturesNames = new Dictionary<int, string>();
             for (int i = 1; i <= 24; i++)
@@ -37,10 +36,10 @@ namespace AdventCalendar.Controllers
                 dictionaryGenericsPicturesNames.Add(i, Path.Combine(boxPictureFullName, $"{i}.png"));
             }
             Dictionary<int, string> dictionaryPicturesNames = calendarDAL.Dictionary(calendar.Id, DateTime.Today);
-
             CalendarViewModel calendarViewModel = new CalendarViewModel(calendar, dictionaryPicturesNames, dictionaryGenericsPicturesNames);
             return View(calendarViewModel);
         }
+
 
         [HttpGet]
         public ActionResult Ajouter()

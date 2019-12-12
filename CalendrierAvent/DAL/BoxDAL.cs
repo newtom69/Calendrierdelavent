@@ -9,24 +9,14 @@ namespace AdventCalendar.DAL
     {
         public Box Details(int id)
         {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                Box box = (from c in db.Box
-                           where c.Id == id
-                           select c).FirstOrDefault();
-                return box;
-            }
+            Box box = new Box(id);
+            box.Lire();
+            return box;
         }
 
         public Box Details(string name)
         {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                Box box = (from c in db.Box
-                           where c.Name == name
-                           select c).FirstOrDefault();
-                return box;
-            }
+            throw new NotImplementedException();
         }
 
         public void Add(string name)
@@ -37,11 +27,7 @@ namespace AdventCalendar.DAL
                 Path = Guid.NewGuid().ToString("n"),
             };
 
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                db.Box.Add(box);
-                db.SaveChanges();
-            }
+            throw new NotImplementedException();
         }
     }
 }
