@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     $('.picture').hide();
     $('.boxReplacingPicture').hide();
-    
+
     $('.picture').click(function () {
         ScheduleHideButtonsCursor();
     });
@@ -90,6 +90,7 @@ function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
     $('#popupPicture').show();
     $('#imagePopup').attr('src', pictureToShow.src);
     $('#caption').html(pictureToShow.alt)
+    ShowButtonsCursor();
 
     var previousPictureId = getPreviousId(pictureToShow.id)
     var nextPictureId = getNextId(pictureToShow.id)
@@ -118,11 +119,8 @@ function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
         $('#nextButton').hide();
         $('#nextArea').hide();
     }
-
-
     ShowPicture_HideBox(pictureToShow, boxToHide);
 }
-
 
 function TouchMove() {
     XEnd = event.touches[0].clientX;
@@ -256,20 +254,28 @@ function CloseFullScreen() {
 }
 
 function KeyDown() {
-    if (event.keyCode == 37 && PreviousPicture != null) {
+    if (event.code == "ArrowLeft" && PreviousPicture != null) {
         Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
         HideButtonsCursor();
     }
-    if (event.keyCode == 39 && NextPicture != null) {
+    if (event.code == "ArrowRight" && NextPicture != null) {
         Popup_ShowPictures_HideBox(NextPicture, NextBox);
         HideButtonsCursor();
     }
     if (event.code == "F11") {
-        if (IsMaxScreen)
+        if (IsMaxScreen) 
             DefaultScreen();
-        else
+        else 
             MaxScreen();
     }
+    if (event.code == "KeyD") {
+        DefaultScreen();
+    }
+    if (event.code == "KeyF") {
+        MaxScreen();
+    }
+    if (event.code == "Escape" && IsMaxScreen) 
+        DefaultScreen();
 }
 
 function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
