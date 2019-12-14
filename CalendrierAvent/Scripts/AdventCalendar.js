@@ -20,7 +20,15 @@
     });
 
     $(document).keydown(function () {
-        KeyDown();
+        KeyDown(event.code);
+    });
+
+    document.addEventListener("fullscreenchange", function (event) {
+        if (document.fullscreenElement) {
+            // fullscreen is activated
+        } else {
+            // fullscreen is cancelled
+        }
     });
 
     $("#previousArea").hover(function () {
@@ -212,7 +220,15 @@ function DefaultScreen() {
     $('#defaultScreenButton').hide();
     $('#maxScreenButton').show();
     IsMaxScreen = false;
-    CloseFullScreen();
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+    }
 }
 
 function MaxScreen() {
@@ -225,10 +241,6 @@ function MaxScreen() {
     $('#maxScreenButton').hide();
     $('#defaultScreenButton').show();
     IsMaxScreen = true;
-    OpenFullScreen();
-}
-
-function OpenFullScreen() {
     var largeImageAndButtons = document.getElementById("largeImageAndButtons");
     if (largeImageAndButtons.requestFullscreen) {
         largeImageAndButtons.requestFullscreen();
@@ -241,41 +253,32 @@ function OpenFullScreen() {
     }
 }
 
-function CloseFullScreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { /* Firefox */
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE/Edge */
-        document.msExitFullscreen();
+function KeyDown(keypress) {
+    switch (keypress) {
+        case 'ArrowLeft' :
+            if (PreviousPicture != null) {
+                Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+                HideButtonsCursor();
+            }
+            break;
+        case 'ArrowRight' :
+            if (NextPicture != null) {
+                Popup_ShowPictures_HideBox(NextPicture, NextBox);
+                HideButtonsCursor();
+            }
+            break;
+        case 'F11':
+        case 'KeyF':
+            if (IsMaxScreen)
+                DefaultScreen();
+            else
+                MaxScreen();
+            break;
+        case 'Escape':
+            if (IsMaxScreen)
+                DefaultScreen();
+            break;
     }
-}
-
-function KeyDown() {
-    if (event.code == "ArrowLeft" && PreviousPicture != null) {
-        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-        HideButtonsCursor();
-    }
-    if (event.code == "ArrowRight" && NextPicture != null) {
-        Popup_ShowPictures_HideBox(NextPicture, NextBox);
-        HideButtonsCursor();
-    }
-    if (event.code == "F11") {
-        if (IsMaxScreen) 
-            DefaultScreen();
-        else 
-            MaxScreen();
-    }
-    if (event.code == "KeyD") {
-        DefaultScreen();
-    }
-    if (event.code == "KeyF") {
-        MaxScreen();
-    }
-    if (event.code == "Escape" && IsMaxScreen) 
-        DefaultScreen();
 }
 
 function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
