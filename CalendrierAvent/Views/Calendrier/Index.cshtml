@@ -1,8 +1,11 @@
-﻿@using HttpCalendrierAvent.ViewModels
+﻿@using AdventCalendar.ViewModels
 @model CalendarViewModel
 @{
     ViewBag.Title = "Index";
     int dayNumber = DateTime.Today.Day;
+    const string BoxPreffix = "box";
+    const string PicturePreffix = "pict";
+
 }
 
 @if (Model != null)
@@ -11,8 +14,8 @@
     <div class="Calendar">
         @for (int i = 1; i <= Model.GenericsPicturesNames.Count; i++)
         {
-            string currentBox = "box" + i;
-            string currentPicture = "pict" + i;
+            string currentBox = BoxPreffix + i;
+            string currentPicture = PicturePreffix + i;
             <div class="BoxAndPicture">
                 <img id="@currentBox" class="box" src="@Model.GenericsPicturesNames[i]" alt="@(i)" onmouseover="ShowPicture_HideBox(@currentPicture, @currentBox);" />
                 @if (Model.PicturesNames.ContainsKey(i))
@@ -21,7 +24,7 @@
                 }
                 else
                 {
-                    <img class="boxReplacingPicture" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
+                    <img class="hover" src="@Model.GenericsPicturesNames[i]" alt="@(i)" />
                 }
             </div>
         }
@@ -41,3 +44,96 @@
         <div id="defaultScreenButton" class="screenButton"></div>
     </div>
 </div>
+
+<script>
+
+function Popup_ShowPictures_HideBox(pictureToShowPermanently, boxToHidePermanently) {
+
+    ScheduleHideButtonsCursor();
+
+    var previousPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) - 1);
+    var nextPictureId = "@PicturePreffix" + (parseInt(pictureToShowPermanently.id.replace("@PicturePreffix", "")) + 1);
+    PreviousPicture = document.getElementById(previousPictureId);
+    NextPicture = document.getElementById(nextPictureId);
+
+    var previousBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix", "")) - 1);
+    var nextBoxId = "@BoxPreffix" + (parseInt(boxToHidePermanently.id.replace("@BoxPreffix", "")) + 1);
+    PreviousBox = document.getElementById(previousBoxId);
+    NextBox = document.getElementById(nextBoxId);
+
+    if (PreviousPicture != null) {
+        $('#previousButton').show();
+        $('#previoustArea').show();
+        $('#previousArea').TouchStart = function () {
+            OnMouseInArea(PreviousButton);
+        }
+        $('#previousArea').TouchEnd = function () {
+            OnMouseOutArea(PreviousButton);
+        }
+    }
+    else {
+        $('#previousButton').hide();
+        $('#previousArea').hide();
+    }
+
+    if (NextPicture != null) {
+        $('#nextButton').show();
+        $('#nextArea').show();
+        NextArea.TouchStart = function () {
+            OnMouseInArea(NextButton);
+        }
+        NextArea.TouchEnd = function () {
+            OnMouseOutArea(NextButton);
+        }
+    }
+    else {
+        $('#nextButton').hide();
+        $('#nextArea').hide();
+    }
+    $('#popupPicture').show();
+
+    ImagePopup.src = pictureToShowPermanently.src;
+    $('#caption').html(pictureToShowPermanently.alt)
+    ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently);
+}
+
+    function TouchStart() {
+        $('#previousButton').show();
+        $('#nextButton').show();
+        XBegin = event.touches[0].clientX;
+        XDiff = 0;
+    }
+
+function TouchMove() {
+    XEnd = event.touches[0].clientX;
+    XDiff = XEnd - XBegin;
+    if (XDiff > 0 && PreviousPicture != null) {
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+    else if (XDiff < 0 && NextPicture != null) {
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+}
+
+function TouchEnd() {
+    if (XDiff > 40 && PreviousPicture != null) {
+        $('#imagePopup').hide();
+        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+        $('#imagePopup').show();
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+    else if (XDiff < -40 && NextPicture != null) {
+        $('#imagePopup').hide();
+        Popup_ShowPictures_HideBox(NextPicture, NextBox);
+        $('#imagePopup').show();
+        ImagePopup.style.transform = 'translate(' + XDiff + 'px)';
+    }
+    ImagePopup.style.transform = 'translate(0px)';
+}
+
+
+
+
+
+
+</script>

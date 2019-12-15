@@ -1,24 +1,5 @@
-﻿// for Modifier.cshtml
-function changePicture(input, imageIdToChange) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $(imageIdToChange)
-                .attr('src', e.target.result)
-                .width(300);
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $('.picture').hide();
-    $('.boxReplacingPicture').hide();
-
-    $('.picture').click(function () {
-        ScheduleHideButtonsCursor();
-    });
 
     $('#closeButton').click(function () {
         DefaultScreen();
@@ -34,7 +15,7 @@ $(document).ready(function () {
     });
 
     $(document).keydown(function () {
-        KeyDown(event.code);
+        KeyDown();
     });
 
     $("#previousArea").hover(function () {
@@ -61,22 +42,6 @@ $(document).ready(function () {
         }
     });
 
-    document.getElementById('nextArea').addEventListener("touchstart", function () {
-        OnMouseInArea(document.getElementById("nextButton"));
-    });
-
-    document.getElementById('nextArea').addEventListener("touchend", function () {
-        OnMouseOutArea(document.getElementById("nextButton"));
-    });
-
-    document.getElementById('previousArea').addEventListener("touchstart", function () {
-        OnMouseInArea(document.getElementById("previousButton"));
-    });
-
-    document.getElementById('previousArea').addEventListener("touchend", function () {
-        OnMouseOutArea(document.getElementById("previousButton"));
-    });
-
     //$('#previousArea').onmousemove = function () {
     //    OnMouseInArea(PreviousButton);
     //}
@@ -89,85 +54,23 @@ $(document).ready(function () {
 
 });
 
+var Popup = document.getElementById("popupPicture");
+var ImagePopup = document.getElementById("imagePopup");
+var CloseButton = document.getElementById("closeButton");
+var PreviousArea = document.getElementById("previousArea");
+var NextArea = document.getElementById("nextArea");
+var PreviousButton = document.getElementById("previousButton");
+var NextButton = document.getElementById("nextButton");
 var PreviousPicture;
 var NextPicture;
 var PreviousBox;
 var NextBox;
+var IsMaxScreen;
 var TimeoutHideBoutonsCursor;
 var XBegin;
 var XEnd;
 var XDiff;
 
-function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
-
-    $('#popupPicture').show();
-    $('#imagePopup').attr('src', pictureToShow.src);
-    $('#caption').html(pictureToShow.alt)
-    ShowButtonsCursor();
-
-    var previousPictureId = getPreviousId(pictureToShow.id)
-    var nextPictureId = getNextId(pictureToShow.id)
-    var previousBoxId = getPreviousId(boxToHide.id)
-    var nextBoxId = getNextId(boxToHide.id)
-
-    PreviousPicture = document.getElementById(previousPictureId);
-    NextPicture = document.getElementById(nextPictureId);
-    PreviousBox = document.getElementById(previousBoxId);
-    NextBox = document.getElementById(nextBoxId);
-
-    if (PreviousPicture != null) {
-        $('#previousButton').show();
-        $('#previousArea').show();
-    }
-    else {
-        $('#previousButton').hide();
-        $('#previousArea').hide();
-    }
-
-    if (NextPicture != null) {
-        $('#nextButton').show();
-        $('#nextArea').show();
-    }
-    else {
-        $('#nextButton').hide();
-        $('#nextArea').hide();
-    }
-    ShowPicture_HideBox(pictureToShow, boxToHide);
-}
-
-function TouchMove() {
-    XEnd = event.touches[0].clientX;
-    XDiff = XEnd - XBegin;
-    if (XDiff > 0 && PreviousPicture != null) {
-        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
-    }
-    else if (XDiff < 0 && NextPicture != null) {
-        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
-    }
-}
-
-function TouchEnd() {
-    if (XDiff > 40 && PreviousPicture != null) {
-        $('#imagePopup').hide();
-        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-        $('#imagePopup').show();
-        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
-    }
-    else if (XDiff < -40 && NextPicture != null) {
-        $('#imagePopup').hide();
-        Popup_ShowPictures_HideBox(NextPicture, NextBox);
-        $('#imagePopup').show();
-        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
-    }
-    document.getElementById("imagePopup").style.transform = 'translate(0px)';
-}
-
-function TouchStart() {
-    $('#previousButton').show();
-    $('#nextButton').show();
-    XBegin = event.touches[0].clientX;
-    XDiff = 0;
-}
 
 function HideButtonsCursor() {
     $('#previousButton').hide();
@@ -185,23 +88,11 @@ function ShowButtonsCursor() {
     $('#nextArea').css('cursor', 'pointer');
     $('#popupPicture').css('cursor', 'default');
     $('#closeButton').show();
-    if (PreviousPicture != null) {
-        $("#previousArea").hover(function () {
-            $('#previousButton').addClass("hover");
-        }, function () {
-            $('#previousButton').removeClass("hover");
-        });
+    if (PreviousPicture != null)
         $('#previousButton').show();
-    }
-    if (NextPicture != null) {
-        $("#nextArea").hover(function () {
-            $('#nextButton').addClass("hover");
-        }, function () {
-            $('#nextButton').removeClass("hover");
-        });
+    if (NextPicture != null)
         $('#nextButton').show();
-    }
-    if (document.fullscreenElement)
+    if (IsMaxScreen)
         $('#defaultScreenButton').show();
     else
         $('#maxScreenButton').show();
@@ -212,8 +103,9 @@ function ScheduleHideButtonsCursor() {
     clearTimeout(TimeoutHideBoutonsCursor);
     TimeoutHideBoutonsCursor = setTimeout(function () {
         HideButtonsCursor();
-    }, 1000);
+    }, 800);
 }
+
 
 function DefaultScreen() {
     $('#caption').show();
@@ -224,15 +116,8 @@ function DefaultScreen() {
     $('#popupPicture').width('99%');
     $('#defaultScreenButton').hide();
     $('#maxScreenButton').show();
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { /* Firefox */
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE/Edge */
-        document.msExitFullscreen();
-    }
+    IsMaxScreen = false;
+    CloseFullScreen();
 }
 
 function MaxScreen() {
@@ -244,6 +129,11 @@ function MaxScreen() {
     $('#popupPicture').height('100%');
     $('#maxScreenButton').hide();
     $('#defaultScreenButton').show();
+    IsMaxScreen = true;
+    OpenFullScreen();
+}
+
+function OpenFullScreen() {
     var largeImageAndButtons = document.getElementById("largeImageAndButtons");
     if (largeImageAndButtons.requestFullscreen) {
         largeImageAndButtons.requestFullscreen();
@@ -256,34 +146,32 @@ function MaxScreen() {
     }
 }
 
-function KeyDown(keypress) {
-    switch (keypress) {
-        case 'ArrowLeft':
-            if (PreviousPicture != null) {
-                Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-                HideButtonsCursor();
-            }
-            break;
-        case 'ArrowRight':
-            if (NextPicture != null) {
-                Popup_ShowPictures_HideBox(NextPicture, NextBox);
-                HideButtonsCursor();
-            }
-            break;
-        case 'KeyF':
-            if (document.fullscreenElement)
-                DefaultScreen();
-            else
-                MaxScreen();
-            break;
-        case 'Escape':
-            if (document.fullscreenElement)
-                DefaultScreen();
-            else {
-                DefaultScreen();
-                $('#popupPicture').hide();
-            }
-            break;
+function CloseFullScreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+    }
+}
+
+function KeyDown() {
+    if (event.keyCode == 37 && PreviousPicture != null) {
+        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+        HideButtonsCursor();
+    }
+    if (event.keyCode == 39 && NextPicture != null) {
+        Popup_ShowPictures_HideBox(NextPicture, NextBox);
+        HideButtonsCursor();
+    }
+    if (event.code == "F11") {
+        if (IsMaxScreen)
+            DefaultScreen();
+        else
+            MaxScreen();
     }
 }
 
@@ -292,18 +180,14 @@ function ShowPicture_HideBox(pictureToShowPermanently, boxToHidePermanently) {
     $(boxToHidePermanently).hide();
 }
 
-function getPreviousId(string) {
-    var indexDigit = string.search(/\d/);
-    var prefix = string.substring(0, indexDigit);
-    var sufix = string.substring(indexDigit, string.length);
-    var previousDigit = parseInt(sufix, 10) - 1;
-    return prefix + previousDigit;
+function HideButtonsCursor() {
+    $('#previousButton').hide();
+    $('#nextButton').hide();
+    $('#closeButton').hide();
+    $('#maxScreenButton').hide();
+    $('#defaultScreenButton').hide();
+    $('#popupPicture').css('cursor', 'none');
+    $('#previousArea').hide();
+    $('#nextArea').hide();
 }
 
-function getNextId(string) {
-    var indexDigit = string.search(/\d/);
-    var prefix = string.substring(0, indexDigit);
-    var sufix = string.substring(indexDigit, string.length);
-    var nextDigit = parseInt(sufix, 10) + 1;
-    return prefix + nextDigit;
-}

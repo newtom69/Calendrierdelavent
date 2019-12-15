@@ -10,45 +10,30 @@ namespace HttpCalendrierAvent.DAL
     {
         public Calendar Details(int id)
         {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                Calendar calendar = (from c in db.Calendar
-                                     where c.Id == id
-                                     select c).FirstOrDefault();
-                return calendar;
-            }
+            Calendar calendar = new Calendar(id);
+            calendar.Lire();
+            return calendar;
         }
 
         public Calendar DetailsByPublicName(string publicName)
         {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                Calendar calendar = (from c in db.Calendar
-                                     where c.PublicName == publicName
-                                     select c).FirstOrDefault();
-                return calendar;
-            }
+            Calendar calendar = new Calendar(publicName, "PublicName");
+            calendar.Lire();
+            return calendar;
         }
 
         public Calendar DetailsByPrivateName(string privateName)
         {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                Calendar calendar = (from c in db.Calendar
-                                     where c.PrivateName == privateName
-                                     select c).FirstOrDefault();
-                return calendar;
-            }
+            Calendar calendar = new Calendar(privateName, "PrivateName");
+            calendar.Lire();
+            return calendar;
         }
 
         internal List<Calendar> List()
         {
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                List<Calendar> calendars = (from c in db.Calendar
-                                            select c).ToList();
-                return calendars;
-            }
+            OmniFW.Business.CollectionEntite<Calendar> calendars = new OmniFW.Business.CollectionEntite<Calendar>();
+            calendars.Rechercher();
+            return calendars.Liste;
         }
 
         public Dictionary<int, string> PicturesList(int id, DateTime date)
@@ -87,12 +72,7 @@ namespace HttpCalendrierAvent.DAL
                 PrivateName = name + randomPrivateSuffix,
                 BoxId = 1 //TODO
             };
-            using (AdventCalendarEntities db = new AdventCalendarEntities())
-            {
-                db.Calendar.Add(calendar);
-                db.SaveChanges();
-            }
-
+            calendar.Enregistrer();
             return calendar;
         }
     }
