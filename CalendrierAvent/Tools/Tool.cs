@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace AdventCalendar.Tools
+namespace HttpCalendrierAvent.Tools
 {
     public static class Tool
     {

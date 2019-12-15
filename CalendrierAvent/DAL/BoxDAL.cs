@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using HttpCalendrierAvent.Models;
+using System;
 using System.Linq;
-using System.Web;
 
-namespace AdventCalendar.DAL
+namespace HttpCalendrierAvent.DAL
 {
     public class BoxDAL
     {

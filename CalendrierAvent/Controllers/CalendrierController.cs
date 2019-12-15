@@ -1,15 +1,15 @@
-﻿using AdventCalendar.DAL;
-using AdventCalendar.Tools;
-using AdventCalendar.ViewModels;
+﻿using HttpCalendrierAvent.DAL;
+using HttpCalendrierAvent.Models;
+using HttpCalendrierAvent.Tools;
+using HttpCalendrierAvent.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
 
-namespace AdventCalendar.Controllers
+namespace HttpCalendrierAvent.Controllers
 {
     public class CalendrierController : Controller
     {

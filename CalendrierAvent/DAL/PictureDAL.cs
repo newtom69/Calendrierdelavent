@@ -1,14 +1,13 @@
-﻿using System;
+﻿using HttpCalendrierAvent.Models;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 
-namespace AdventCalendar.DAL
+namespace HttpCalendrierAvent.DAL
 {
     public class PictureDAL
     {
-
         public Picture Details(int calendarId, int dayNumber)
         {
             using (AdventCalendarEntities db = new AdventCalendarEntities())

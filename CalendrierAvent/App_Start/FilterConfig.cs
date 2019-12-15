@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace AdventCalendar
+namespace HttpCalendrierAvent
 {
     public class FilterConfig
     {
