@@ -1,4 +1,18 @@
-﻿$(document).ready(function () {
+﻿// for Modifier.cshtml
+function changePicture(input, imageIdToChange) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $(imageIdToChange)
+                .attr('src', e.target.result)
+                .width(300);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+
+$(document).ready(function () {
     $('.picture').hide();
     $('.boxReplacingPicture').hide();
 
@@ -21,14 +35,6 @@
 
     $(document).keydown(function () {
         KeyDown(event.code);
-    });
-
-    document.addEventListener("fullscreenchange", function (event) {
-        if (document.fullscreenElement) {
-            // fullscreen is activated
-        } else {
-            // fullscreen is cancelled
-        }
     });
 
     $("#previousArea").hover(function () {
@@ -87,7 +93,6 @@ var PreviousPicture;
 var NextPicture;
 var PreviousBox;
 var NextBox;
-var IsMaxScreen;
 var TimeoutHideBoutonsCursor;
 var XBegin;
 var XEnd;
@@ -196,7 +201,7 @@ function ShowButtonsCursor() {
         });
         $('#nextButton').show();
     }
-    if (IsMaxScreen)
+    if (document.fullscreenElement)
         $('#defaultScreenButton').show();
     else
         $('#maxScreenButton').show();
@@ -219,7 +224,6 @@ function DefaultScreen() {
     $('#popupPicture').width('99%');
     $('#defaultScreenButton').hide();
     $('#maxScreenButton').show();
-    IsMaxScreen = false;
     if (document.exitFullscreen) {
         document.exitFullscreen();
     } else if (document.mozCancelFullScreen) { /* Firefox */
@@ -240,7 +244,6 @@ function MaxScreen() {
     $('#popupPicture').height('100%');
     $('#maxScreenButton').hide();
     $('#defaultScreenButton').show();
-    IsMaxScreen = true;
     var largeImageAndButtons = document.getElementById("largeImageAndButtons");
     if (largeImageAndButtons.requestFullscreen) {
         largeImageAndButtons.requestFullscreen();
@@ -255,28 +258,31 @@ function MaxScreen() {
 
 function KeyDown(keypress) {
     switch (keypress) {
-        case 'ArrowLeft' :
+        case 'ArrowLeft':
             if (PreviousPicture != null) {
                 Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
                 HideButtonsCursor();
             }
             break;
-        case 'ArrowRight' :
+        case 'ArrowRight':
             if (NextPicture != null) {
                 Popup_ShowPictures_HideBox(NextPicture, NextBox);
                 HideButtonsCursor();
             }
             break;
-        case 'F11':
         case 'KeyF':
-            if (IsMaxScreen)
+            if (document.fullscreenElement)
                 DefaultScreen();
             else
                 MaxScreen();
             break;
         case 'Escape':
-            if (IsMaxScreen)
+            if (document.fullscreenElement)
                 DefaultScreen();
+            else {
+                DefaultScreen();
+                $('#popupPicture').hide();
+            }
             break;
     }
 }
