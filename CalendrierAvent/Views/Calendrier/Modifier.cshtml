@@ -1,4 +1,4 @@
-﻿@using AdventCalendar.ViewModels
+﻿@using HttpCalendrierAvent.ViewModels
 @model CalendarViewModel
 
 @{
@@ -6,12 +6,6 @@
     string publicUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{Model.Calendar.PublicName}";
     string privateUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}/{Model.Calendar.PrivateName}";
 }
-
-
-@*<source type="image/webp" srcset="~/Content/Photos/Camille-000001/test.webp">
-<source type="image/jpeg" srcset="~/Content/Photos/Camille-000001/test.gif">
-<img src="~/Content/Photos/Camille-000001/test.gif" alt="">*@
-
 
 <h1>Calendrier de l'Avent de @Model.Calendar.DisplayName</h1>
 <h4>Cliquez sur l'image à changer</h4>
@@ -43,17 +37,6 @@
 </div>
 
 
-
 <script>
-    function changePicture(input, imageIdToChange) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $(imageIdToChange)
-                    .attr('src', e.target.result)
-                    .width(300);
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+
 </script>
