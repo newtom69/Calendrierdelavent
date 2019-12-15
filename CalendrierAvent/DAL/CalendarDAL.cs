@@ -1,10 +1,10 @@
-﻿using AdventCalendar.Tools;
+﻿using HttpCalendrierAvent.Models;
+using HttpCalendrierAvent.Tools;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 
-namespace AdventCalendar.DAL
+namespace HttpCalendrierAvent.DAL
 {
     public class CalendarDAL
     {

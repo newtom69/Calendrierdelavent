@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "Ajouter un calendrier";
 }
-
 <h2>Ajouter un calendrier de l'Avent</h2>
 
 @using (Html.BeginForm((string)ViewContext.RouteData.Values["action"], (string)ViewContext.RouteData.Values["controller"], new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { enctype = "multipart/form-data" }))
