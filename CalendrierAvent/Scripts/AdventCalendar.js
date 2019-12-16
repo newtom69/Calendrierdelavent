@@ -76,17 +76,6 @@ $(document).ready(function () {
     document.getElementById('previousArea').addEventListener("touchend", function () {
         OnMouseOutArea(document.getElementById("previousButton"));
     });
-
-    //$('#previousArea').onmousemove = function () {
-    //    OnMouseInArea(PreviousButton);
-    //}
-    //$('#previousArea').TouchStart = function () {
-    //    OnMouseInArea(PreviousButton);
-    //}
-    //$('#previousArea').TouchEnd = function () {
-    //    OnMouseOutArea(PreviousButton);
-    //}
-
 });
 
 var PreviousPicture;
@@ -98,8 +87,16 @@ var XBegin;
 var XEnd;
 var XDiff;
 
-function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
+function FirstShowPopup(pictureToShow, boxToHide) {
+    document.getElementById('popupPicture').style.animationName = 'zoom';
+    document.getElementById('popupPicture').style.animationDuration = '0.5s';
+    document.getElementById('popupPicture').style.webkitAnimationName = 'zoom';
+    document.getElementById('popupPicture').style.webkitAnimationDuration = '0.5s';
+    Popup_ShowPictures_HideBox(pictureToShow, boxToHide);
+    //TODO JQUERY
+}
 
+function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
     $('#popupPicture').show();
     $('#imagePopup').attr('src', pictureToShow.src);
     $('#caption').html(pictureToShow.alt)
@@ -109,7 +106,6 @@ function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
     var nextPictureId = getNextId(pictureToShow.id)
     var previousBoxId = getPreviousId(boxToHide.id)
     var nextBoxId = getNextId(boxToHide.id)
-
     PreviousPicture = document.getElementById(previousPictureId);
     NextPicture = document.getElementById(nextPictureId);
     PreviousBox = document.getElementById(previousBoxId);
@@ -118,6 +114,7 @@ function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
     if (PreviousPicture != null) {
         $('#previousButton').show();
         $('#previousArea').show();
+        $('#previousImagePopup').attr('src', PreviousPicture.src);
     }
     else {
         $('#previousButton').hide();
@@ -127,39 +124,93 @@ function Popup_ShowPictures_HideBox(pictureToShow, boxToHide) {
     if (NextPicture != null) {
         $('#nextButton').show();
         $('#nextArea').show();
+        $('#nextImagePopup').attr('src', NextPicture.src);
     }
     else {
         $('#nextButton').hide();
         $('#nextArea').hide();
     }
     ShowPicture_HideBox(pictureToShow, boxToHide);
+
 }
 
 function TouchMove() {
     XEnd = event.touches[0].clientX;
     XDiff = XEnd - XBegin;
+    var screenWidth = $('#largeImageAndButtons').width();
+    var previousWidth = $("#previousImagePopup").width();
+    var nextWidth = $("#nextImagePopup").width();
     if (XDiff > 0 && PreviousPicture != null) {
+        var xdiffPrevious = XDiff - 10 + screenWidth - previousWidth;
+        $('#previousImagePopup').show();
         document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+        document.getElementById("previousImagePopup").style.transform = 'translate(' + xdiffPrevious + 'px, -50%)';
     }
     else if (XDiff < 0 && NextPicture != null) {
+        var xdiffNext = XDiff + 10 - screenWidth + nextWidth;
+        $('#nextImagePopup').show();
         document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+        document.getElementById("nextImagePopup").style.transform = 'translate(' + xdiffNext + 'px, -50%)';
     }
 }
 
 function TouchEnd() {
-    if (XDiff > 40 && PreviousPicture != null) {
-        $('#imagePopup').hide();
-        Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
-        $('#imagePopup').show();
-        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+    var screenWidth = $('#largeImageAndButtons').width();
+    var previousWidth = $("#previousImagePopup").width();
+    var nextWidth = $("#nextImagePopup").width();
+
+    if (XDiff > 80 && PreviousPicture != null) {
+        $("#imagePopup").hide();
+        $("#previousImagePopup").animate({
+            left: (-XDiff + 10 - (screenWidth - previousWidth)/2) + "px"
+        }, {
+            duration: "fast",
+            easing: "linear",
+            complete: function () {
+            swapImagePrevious();
+            }
+        });
     }
-    else if (XDiff < -40 && NextPicture != null) {
-        $('#imagePopup').hide();
-        Popup_ShowPictures_HideBox(NextPicture, NextBox);
-        $('#imagePopup').show();
-        document.getElementById("imagePopup").style.transform = 'translate(' + XDiff + 'px)';
+    else if (XDiff < -80 && NextPicture != null) {
+        $("#imagePopup").hide();
+        $("#nextImagePopup").animate({
+            right: (XDiff + 10 - (screenWidth - nextWidth) / 2) + "px"
+        }, {
+            duration: "fast",
+            easing: "linear",
+                complete: function () {
+                    swapImageNext();
+            }
+        });
     }
+    else {
+         resetImagesPopup();
+    }
+}
+
+
+function swapImageNext() {
+    Popup_ShowPictures_HideBox(NextPicture, NextBox);
+    $("#imagePopup").show();
+    resetImagesPopup();
+}
+
+function swapImagePrevious() {
+    Popup_ShowPictures_HideBox(PreviousPicture, PreviousBox);
+    $("#imagePopup").show();
+    resetImagesPopup();
+}
+
+function resetImagesPopup() {
+    $('#nextImagePopup').hide();
+    $('#previousImagePopup').hide();
     document.getElementById("imagePopup").style.transform = 'translate(0px)';
+    document.getElementById("previousImagePopup").style.transform = 'translate(0px,0px)';
+    document.getElementById("nextImagePopup").style.transform = 'translate(0px,0px)';
+    document.getElementById("nextImagePopup").style.right = '-100%';
+    document.getElementById("nextImagePopup").style.top = '50%';
+    document.getElementById("previousImagePopup").style.left = '-100%';
+    document.getElementById("previousImagePopup").style.top = '50%';
 }
 
 function TouchStart() {
