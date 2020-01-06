@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HttpCalendrierAvent.Models
+namespace HttpCalendrierAvent
 {
     using System;
     using System.Data.Entity;

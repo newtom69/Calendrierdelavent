@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HttpCalendrierAvent.Models
+namespace HttpCalendrierAvent
 {
     using System;
     using System.Collections.Generic;
@@ -25,6 +25,7 @@ namespace HttpCalendrierAvent.Models
         public string PublicName { get; set; }
         public string PrivateName { get; set; }
         public int BoxId { get; set; }
+        public Nullable<int> Annee { get; set; }
     
         public virtual Box Box { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

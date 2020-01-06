@@ -1,5 +1,4 @@
 ﻿using HttpCalendrierAvent.DAL;
-using HttpCalendrierAvent.Models;
 using HttpCalendrierAvent.Tools;
 using HttpCalendrierAvent.ViewModels;
 using System;

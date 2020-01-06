@@ -1,5 +1,4 @@
-﻿using HttpCalendrierAvent.Models;
-using HttpCalendrierAvent.Tools;
+﻿using HttpCalendrierAvent.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,6 +84,7 @@ namespace HttpCalendrierAvent.DAL
                 DisplayName = name,
                 PublicName = name + randomPublicSuffix,
                 PrivateName = name + randomPrivateSuffix,
+                Annee = DateTime.Today.Year,
                 BoxId = 1 //TODO
             };
             using (AdventCalendarEntities db = new AdventCalendarEntities())

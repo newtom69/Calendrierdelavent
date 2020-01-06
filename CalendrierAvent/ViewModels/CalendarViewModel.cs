@@ -1,5 +1,4 @@
-﻿using HttpCalendrierAvent.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace HttpCalendrierAvent.ViewModels
 {
