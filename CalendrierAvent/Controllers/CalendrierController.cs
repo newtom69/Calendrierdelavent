@@ -35,7 +35,16 @@ namespace HttpCalendrierAvent.Controllers
             {
                 dictionaryGenericsPicturesNames.Add(i, Path.Combine(boxPictureFullName, $"{i}.png"));
             }
-            Dictionary<int, string> dictionaryPicturesNames = calendarDAL.Dictionary(calendar.Id, DateTime.Today);
+
+            Dictionary<int, string> dictionaryPicturesNames;
+            if (calendar.Annee < DateTime.Today.Year)
+            {
+                dictionaryPicturesNames = calendarDAL.Dictionary(calendar.Id);
+            }
+            else
+            {
+                dictionaryPicturesNames = calendarDAL.Dictionary(calendar.Id, DateTime.Today);
+            }
 
             CalendarViewModel calendarViewModel = new CalendarViewModel(calendar, dictionaryPicturesNames, dictionaryGenericsPicturesNames);
             return View(calendarViewModel);
